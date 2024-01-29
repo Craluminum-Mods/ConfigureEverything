@@ -1,0 +1,14 @@
+{
+    "type": "code",
+    "side": "universal",
+    "RequiredOnServer": false,
+    "RequiredOnClient": false,
+    "modid": "configureeverything",
+    "name": "Configure Everything",
+    "description": "All configurations in one place",
+    "authors": ["Craluminum2413"],
+    "version": "1.0.0",
+    "dependencies": {
+        "game": "1.19.0"
+    }
+}
