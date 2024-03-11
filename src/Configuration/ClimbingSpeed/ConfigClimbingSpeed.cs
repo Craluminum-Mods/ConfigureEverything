@@ -7,16 +7,18 @@ public class ConfigClimbingSpeed : IModConfig
     public bool Enabled { get; set; }
 
     public readonly string Comment = "Ladder climbing speed";
-    public double AscendingSpeed { get; set; } = 0.035;
-    public double DescendingSpeed { get; set; } = 0.07;
+    public readonly float DefaultUpSpeed = 0.07f;
+    public readonly float DefaultDownSpeed = 0.035f;
+    public float UpSpeed { get; set; } = 0.07f;
+    public float DownSpeed { get; set; } = 0.035f;
 
     public ConfigClimbingSpeed(ICoreAPI api, ConfigClimbingSpeed previousConfig = null)
     {
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
-            AscendingSpeed = previousConfig.AscendingSpeed;
-            DescendingSpeed = previousConfig.DescendingSpeed;
+            UpSpeed = previousConfig.UpSpeed;
+            DownSpeed = previousConfig.DownSpeed;
         }
     }
 }

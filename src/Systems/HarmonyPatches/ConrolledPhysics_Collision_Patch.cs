@@ -1,43 +1,25 @@
-using System.Collections.Generic;
-using System.Reflection.Emit;
+using System;
 using HarmonyLib;
+using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.GameContent;
 
 namespace ConfigureEverything.HarmonyPatches;
 
-public static class ConrolledPhysics_Collision_Patch
+public static class EntityBehaviorControlledPhysics_Patch
 {
-    [HarmonyPatch(typeof(EntityBehaviorControlledPhysics), nameof(EntityBehaviorControlledPhysics.DisplaceWithBlockCollision))]
-    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    [HarmonyPatch(typeof(EntityBehaviorControlledPhysics), MethodType.Constructor, new Type[] { typeof(Entity) })]
+    public static void Postfix(EntityBehaviorControlledPhysics __instance, Entity entity)
     {
-        double descendingSpeed = HarmonyPatches.ConfigClimbingSpeed.DescendingSpeed;
-        double ascendingSpeed = HarmonyPatches.ConfigClimbingSpeed.AscendingSpeed;
-
-        bool found = false;
-        List<CodeInstruction> codes = new(instructions);
-
-        for (int i = 0; i < codes.Count; i++)
+        if (entity is not EntityPlayer)
         {
-            if (!found && codes[i].Is(OpCodes.Ldc_R8, -0.07))
-            {
-                codes[i].operand = -descendingSpeed;
-                yield return codes[i];
-                continue;
-            }
-            if (!found && codes[i].Is(OpCodes.Ldc_R8, 0.07))
-            {
-                codes[i].operand = descendingSpeed;
-                yield return codes[i];
-                continue;
-            }
-            if (!found && codes[i].Is(OpCodes.Ldc_R8, 0.035))
-            {
-                codes[i].operand = ascendingSpeed;
-                yield return codes[i];
-                found = true;
-                continue;
-            }
-            yield return codes[i];
+            return;
         }
+
+        // reversed because why not
+        float climbUpSpeed = HarmonyPatches.ConfigClimbingSpeed.DownSpeed;
+        float climbDownSpeed = HarmonyPatches.ConfigClimbingSpeed.UpSpeed;
+        __instance.climbUpSpeed = climbUpSpeed;
+        __instance.climbDownSpeed = climbDownSpeed;
     }
 }

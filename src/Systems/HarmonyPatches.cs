@@ -33,7 +33,7 @@ public class HarmonyPatches : ModSystem
             ConfigClimbingSpeed = ModConfig.ReadConfig<ConfigClimbingSpeed>(api, $"ConfigureEverything/{api.Side}/ClimbingSpeed.json");
             if (ConfigClimbingSpeed?.Enabled == true)
             {
-                HarmonyInstance.Patch(original: typeof(EntityBehaviorControlledPhysics).GetMethod(nameof(EntityBehaviorControlledPhysics.DisplaceWithBlockCollision)), transpiler: typeof(ConrolledPhysics_Collision_Patch).GetMethod(nameof(ConrolledPhysics_Collision_Patch.Transpiler)));
+                HarmonyInstance.Patch(original: typeof(EntityBehaviorControlledPhysics).GetConstructor(new[] { typeof(Entity) }), postfix: typeof(EntityBehaviorControlledPhysics_Patch).GetMethod(nameof(EntityBehaviorControlledPhysics_Patch.Postfix)));
             }
 
             ConfigSwimmingSpeed = ModConfig.ReadConfig<ConfigSwimmingSpeed>(api, $"ConfigureEverything/{api.Side}/SwimmingSpeed.json");
@@ -53,7 +53,7 @@ public class HarmonyPatches : ModSystem
     {
         if (ConfigClimbingSpeed?.Enabled == true)
         {
-            HarmonyInstance.Unpatch(original: typeof(EntityBehaviorControlledPhysics).GetMethod(nameof(EntityBehaviorControlledPhysics.DisplaceWithBlockCollision)), HarmonyPatchType.All, HarmonyID);
+            HarmonyInstance.Unpatch(original: typeof(EntityBehaviorControlledPhysics).GetConstructor(new[] { typeof(Entity) }), HarmonyPatchType.All, HarmonyID);
         }
         if (ConfigSwimmingSpeed?.Enabled == true)
         {
