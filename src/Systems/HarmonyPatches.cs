@@ -10,8 +10,8 @@ namespace ConfigureEverything.HarmonyPatches;
 
 public class HarmonyPatches : ModSystem
 {
-    public const string HarmonyID = "craluminum2413.ConfigureEverything";
-    public static Harmony HarmonyInstance => new(HarmonyID);
+    public string HarmonyID => Mod.Info.ModID;
+    public Harmony HarmonyInstance => new(HarmonyID);
 
     public static ConfigClimbingSpeed ConfigClimbingSpeed { get; private set; }
     public static ConfigSwimmingSpeed ConfigSwimmingSpeed { get; private set; }
@@ -19,18 +19,14 @@ public class HarmonyPatches : ModSystem
     public override void Dispose()
     {
         UnpatchAll();
-        base.Dispose();
     }
 
     public override void AssetsFinalize(ICoreAPI api)
     {
-        if (api.Side.IsServer())
-        {
-            PatchAll(api);
-        }
+        PatchAll(api);
     }
 
-    private static void PatchAll(ICoreAPI api)
+    private void PatchAll(ICoreAPI api)
     {
         if (api.Side.IsServer())
         {
@@ -53,7 +49,7 @@ public class HarmonyPatches : ModSystem
         }
     }
 
-    private static void UnpatchAll()
+    private void UnpatchAll()
     {
         if (ConfigClimbingSpeed?.Enabled == true)
         {
