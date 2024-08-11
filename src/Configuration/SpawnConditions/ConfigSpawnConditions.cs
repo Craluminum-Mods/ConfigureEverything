@@ -21,11 +21,11 @@ public class ConfigSpawnConditions : IModConfigWithDefaultValues
     public string Documentation = "https://wiki.vintagestory.at/index.php/Modding:Entity_Json_Properties";
 
     [JsonProperty(Order = 4)]
-    public Dictionary<string, List<string>> Examples = new()
+    public Dictionary<string, IEnumerable<string>> Examples = new()
     {
-        [nameof(RuntimeSpawnConditions.ClimateValueMode)] = Enum.GetValues(typeof(EnumGetClimateMode)).Cast<EnumGetClimateMode>().Select(e => $"{(int)e} = {e}").ToList(),
-        [nameof(RuntimeSpawnConditions.LightLevelType)] = Enum.GetValues(typeof(EnumLightLevelType)).Cast<EnumLightLevelType>().Select(e => $"{(int)e} = {e}").ToList(),
-        [nameof(NatFloat.dist)] = Enum.GetValues(typeof(EnumDistribution)).Cast<EnumDistribution>().Select(e => $"{(int)e} = {e}").ToList(),
+        [nameof(RuntimeSpawnConditions.ClimateValueMode)] = Enum.GetValues(typeof(EnumGetClimateMode)).Cast<EnumGetClimateMode>().Select(e => $"{(int)e} = {e}"),
+        [nameof(RuntimeSpawnConditions.LightLevelType)] = Enum.GetValues(typeof(EnumLightLevelType)).Cast<EnumLightLevelType>().Select(e => $"{(int)e} = {e}"),
+        [nameof(NatFloat.dist)] = Enum.GetValues(typeof(EnumDistribution)).Cast<EnumDistribution>().Select(e => $"{(int)e} = {e}"),
     };
 
     [JsonProperty(Order = 5)]

@@ -1,5 +1,4 @@
-using System;
-using HarmonyLib;
+using System.Reflection;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.GameContent;
@@ -8,7 +7,13 @@ namespace ConfigureEverything.HarmonyPatches;
 
 public static class EntityBehaviorControlledPhysics_Patch
 {
-    [HarmonyPatch(typeof(EntityBehaviorControlledPhysics), MethodType.Constructor, new Type[] { typeof(Entity) })]
+    public static ConstructorInfo TargetMethod()
+    {
+        return typeof(EntityBehaviorControlledPhysics).GetConstructor(new[] { typeof(Entity) });
+    }
+
+    public static MethodInfo GetPostfix() => typeof(EntityBehaviorControlledPhysics_Patch).GetMethod(nameof(Postfix));
+
     public static void Postfix(EntityBehaviorControlledPhysics __instance, Entity entity)
     {
         if (entity is not EntityPlayer)

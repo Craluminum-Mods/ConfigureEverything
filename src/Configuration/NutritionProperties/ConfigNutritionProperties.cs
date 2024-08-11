@@ -16,9 +16,9 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
     public bool FillWithDefaultValues { get; set; }
 
     [JsonProperty(Order = 3)]
-    public Dictionary<string, List<string>> Examples = new()
+    public Dictionary<string, IEnumerable<string>> Examples = new()
     {
-        [nameof(FoodNutritionProperties.FoodCategory)] = Enum.GetValues(typeof(EnumFoodCategory)).Cast<EnumFoodCategory>().Select(e => $"{(int)e} = {e}").ToList(),
+        [nameof(FoodNutritionProperties.FoodCategory)] = Enum.GetValues(typeof(EnumFoodCategory)).Cast<EnumFoodCategory>().Select(e => $"{(int)e} = {e}"),
     };
 
     [JsonProperty(Order = 4)]

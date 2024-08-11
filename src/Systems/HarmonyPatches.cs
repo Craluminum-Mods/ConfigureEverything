@@ -31,20 +31,17 @@ public class HarmonyPatches : ModSystem
         if (api.Side.IsServer())
         {
             ConfigClimbingSpeed = ModConfig.ReadConfig<ConfigClimbingSpeed>(api, $"ConfigureEverything/{api.Side}/ClimbingSpeed.json");
+            ConfigSwimmingSpeed = ModConfig.ReadConfig<ConfigSwimmingSpeed>(api, $"ConfigureEverything/{api.Side}/SwimmingSpeed.json");
+
             if (ConfigClimbingSpeed?.Enabled == true)
             {
-                HarmonyInstance.Patch(original: typeof(EntityBehaviorControlledPhysics).GetConstructor(new[] { typeof(Entity) }), postfix: typeof(EntityBehaviorControlledPhysics_Patch).GetMethod(nameof(EntityBehaviorControlledPhysics_Patch.Postfix)));
+                HarmonyInstance.Patch(original: EntityBehaviorControlledPhysics_Patch.TargetMethod(), postfix: EntityBehaviorControlledPhysics_Patch.GetPostfix());
             }
-
-            ConfigSwimmingSpeed = ModConfig.ReadConfig<ConfigSwimmingSpeed>(api, $"ConfigureEverything/{api.Side}/SwimmingSpeed.json");
             if (ConfigSwimmingSpeed?.Enabled == true)
             {
-                HarmonyInstance.Patch(
-                    original: AccessTools.PropertyGetter(typeof(EntityBoat), nameof(EntityBoat.SpeedMultiplier)),
-                    postfix: typeof(EntityBoat_SpeedMultiplier_Patch).GetMethod(nameof(EntityBoat_SpeedMultiplier_Patch.Postfix)));
-
-                HarmonyInstance.Patch(original: typeof(Entity).GetMethod(nameof(Entity.GetInfoText)), postfix: typeof(Entity_Info_Patch).GetMethod(nameof(Entity_Info_Patch.Postfix)));
-                HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetHeldItemInfo)), postfix: typeof(CollectibleObject_Info_Patch).GetMethod(nameof(CollectibleObject_Info_Patch.Postfix)));
+                HarmonyInstance.Patch(original: EntityBoat_SpeedMultiplier_Patch.TargetMethod(), postfix: EntityBoat_SpeedMultiplier_Patch.GetPostfix());
+                HarmonyInstance.Patch(original: Entity_GetInfoText_Patch.TargetMethod(), postfix: Entity_GetInfoText_Patch.GetPostfix());
+                HarmonyInstance.Patch(original: CollectibleObject_GetHeldItemInfo_Patch.TargetMethod(), postfix: CollectibleObject_GetHeldItemInfo_Patch.GetPostfix());
             }
         }
     }
@@ -53,13 +50,13 @@ public class HarmonyPatches : ModSystem
     {
         if (ConfigClimbingSpeed?.Enabled == true)
         {
-            HarmonyInstance.Unpatch(original: typeof(EntityBehaviorControlledPhysics).GetConstructor(new[] { typeof(Entity) }), HarmonyPatchType.All, HarmonyID);
+            HarmonyInstance.Unpatch(original: EntityBehaviorControlledPhysics_Patch.TargetMethod(), HarmonyPatchType.All, HarmonyID);
         }
         if (ConfigSwimmingSpeed?.Enabled == true)
         {
-            HarmonyInstance.Unpatch(original: AccessTools.PropertyGetter(typeof(EntityBoat), nameof(EntityBoat.SpeedMultiplier)), HarmonyPatchType.All, HarmonyID);
-            HarmonyInstance.Unpatch(original: typeof(Entity).GetMethod(nameof(Entity.GetInfoText)), HarmonyPatchType.All, HarmonyID);
-            HarmonyInstance.Unpatch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetHeldItemInfo)), HarmonyPatchType.All, HarmonyID);
+            HarmonyInstance.Unpatch(original: EntityBoat_SpeedMultiplier_Patch.TargetMethod(), HarmonyPatchType.All, HarmonyID);
+            HarmonyInstance.Unpatch(original: Entity_GetInfoText_Patch.TargetMethod(), HarmonyPatchType.All, HarmonyID);
+            HarmonyInstance.Unpatch(original: CollectibleObject_GetHeldItemInfo_Patch.TargetMethod(), HarmonyPatchType.All, HarmonyID);
         }
     }
 }

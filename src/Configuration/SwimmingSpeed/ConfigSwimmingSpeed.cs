@@ -31,7 +31,7 @@ public class ConfigSwimmingSpeed : IModConfigWithDefaultValues
 
     public void FillDefault(ICoreAPI api)
     {
-        foreach (EntityProperties key in api.World.EntityTypes.Where(x => x.IsBoat()).ToList())
+        foreach (EntityProperties key in api.World.EntityTypes.Where(x => x.IsBoat()))
         {
             if (!SpeedMultiplier.ContainsKey(key.Code.ToString()))
             {

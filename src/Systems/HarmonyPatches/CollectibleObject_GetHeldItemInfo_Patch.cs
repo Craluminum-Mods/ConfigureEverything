@@ -1,4 +1,5 @@
 using HarmonyLib;
+using System.Reflection;
 using System.Text;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -7,10 +8,16 @@ using Vintagestory.API.Util;
 
 namespace ConfigureEverything.HarmonyPatches;
 
-public static class CollectibleObject_Info_Patch
+public static class CollectibleObject_GetHeldItemInfo_Patch
 {
-    [HarmonyPatch(typeof(CollectibleObject), nameof(CollectibleObject.GetHeldItemInfo))]
-    public static void Postfix(CollectibleObject __instance, ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world)
+    public static MethodBase TargetMethod()
+    {
+        return AccessTools.Method(typeof(CollectibleObject), nameof(CollectibleObject.GetHeldItemInfo), new[] { typeof(ItemSlot), typeof(StringBuilder), typeof(IWorldAccessor), typeof(bool) });
+    }
+
+    public static MethodInfo GetPostfix() => typeof(CollectibleObject_GetHeldItemInfo_Patch).GetMethod(nameof(Postfix));
+
+    public static void Postfix(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world)
     {
         if (inSlot.Empty || inSlot?.Itemstack == null)
         {

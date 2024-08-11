@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Linq;
 using Vintagestory.API.Common;
 
 namespace ConfigureEverything.Configuration.ConfigNutritionProperties;
