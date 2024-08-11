@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +10,23 @@ namespace ConfigureEverything.Configuration.ConfigTransitionableProperties;
 
 public class ConfigTransitionableProperties : IModConfigWithDefaultValues
 {
+    [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
+
+    [JsonProperty(Order = 2)]
     public bool FillWithDefaultValues { get; set; }
 
+    [JsonProperty(Order = 3)]
     public readonly Dictionary<string, List<string>> Examples = new()
     {
         [nameof(TransitionableProperties.Type)] = Enum.GetValues(typeof(EnumTransitionType)).Cast<EnumTransitionType>().Select(e => $"{(int)e} = {e}").ToList(),
         [nameof(TransitionableProperties.FreshHours.dist)] = Enum.GetValues(typeof(EnumDistribution)).Cast<EnumDistribution>().Select(e => $"{(int)e} = {e}").ToList(),
     };
 
+    [JsonProperty(Order = 4)]
     public Dictionary<string, TransitionableProperties[]> BlocksTransitionableProperties { get; set; } = new();
+
+    [JsonProperty(Order = 5)]
     public Dictionary<string, TransitionableProperties[]> ItemsTransitionableProperties { get; set; } = new();
 
     public ConfigTransitionableProperties(ICoreAPI api, ConfigTransitionableProperties previousConfig = null)
@@ -26,8 +34,8 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
+            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
 
-            Examples = previousConfig.Examples;
             BlocksTransitionableProperties.AddRange(previousConfig.BlocksTransitionableProperties);
             ItemsTransitionableProperties.AddRange(previousConfig.ItemsTransitionableProperties);
         }

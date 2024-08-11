@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Vintagestory.API.Common;
+using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration.ConfigStackSizes;
 
@@ -17,24 +18,11 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
-
-            foreach ((string key, int value) in previousConfig.BlockStackSizes)
-            {
-                if (!BlockStackSizes.ContainsKey(key))
-                {
-                    BlockStackSizes.Add(key, value);
-                }
-            }
-
-            foreach ((string key, int value) in previousConfig.ItemStackSizes)
-            {
-                if (!ItemStackSizes.ContainsKey(key))
-                {
-                    ItemStackSizes.Add(key, value);
-                }
-            }
+            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
 
             StackSizeMultiplier = previousConfig.StackSizeMultiplier;
+            BlockStackSizes.AddRange(previousConfig.BlockStackSizes);
+            ItemStackSizes.AddRange(previousConfig.ItemStackSizes);
         }
 
         if (api != null && FillWithDefaultValues)

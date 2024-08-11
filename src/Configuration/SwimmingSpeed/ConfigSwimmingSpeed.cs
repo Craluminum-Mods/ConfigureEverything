@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration.ConfigSwimmingSpeed;
 
@@ -17,14 +18,9 @@ public class ConfigSwimmingSpeed : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
+            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
 
-            foreach ((string key, float value) in previousConfig.SpeedMultiplier)
-            {
-                if (!SpeedMultiplier.ContainsKey(key))
-                {
-                    SpeedMultiplier.Add(key, value);
-                }
-            }
+            SpeedMultiplier.AddRange(previousConfig.SpeedMultiplier);
         }
 
         if (api != null && FillWithDefaultValues)

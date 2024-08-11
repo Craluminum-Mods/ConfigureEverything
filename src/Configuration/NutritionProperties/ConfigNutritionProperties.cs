@@ -1,20 +1,27 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
+using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration.ConfigNutritionProperties;
 
 public class ConfigNutritionProperties : IModConfigWithDefaultValues
 {
+    [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
+
+    [JsonProperty(Order = 2)]
     public bool FillWithDefaultValues { get; set; }
 
-    public readonly Dictionary<string, List<string>> Examples = new()
+    [JsonProperty(Order = 3)]
+    public Dictionary<string, List<string>> Examples = new()
     {
         [nameof(FoodNutritionProperties.FoodCategory)] = Enum.GetValues(typeof(EnumFoodCategory)).Cast<EnumFoodCategory>().Select(e => $"{(int)e} = {e}").ToList(),
     };
 
+    [JsonProperty(Order = 4)]
     public Dictionary<string, FoodNutritionProperties> Food { get; set; } = new();
 
     public ConfigNutritionProperties(ICoreAPI api, ConfigNutritionProperties previousConfig = null)
@@ -22,16 +29,9 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
+            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
 
-            Examples = previousConfig.Examples;
-
-            foreach ((string key, FoodNutritionProperties value) in previousConfig.Food)
-            {
-                if (!Food.ContainsKey(key))
-                {
-                    Food.Add(key, value);
-                }
-            }
+            Food.AddRange(previousConfig.Food);
         }
 
         if (api != null && FillWithDefaultValues)

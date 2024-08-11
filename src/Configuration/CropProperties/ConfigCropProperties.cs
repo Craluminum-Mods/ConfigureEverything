@@ -1,20 +1,27 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
+using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration.ConfigCropProperties;
 
 public class ConfigCropProperties : IModConfigWithDefaultValues
 {
+    [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
+
+    [JsonProperty(Order = 2)]
     public bool FillWithDefaultValues { get; set; }
 
-    public readonly Dictionary<string, List<string>> Examples = new()
+    [JsonProperty(Order = 3)]
+    public Dictionary<string, IEnumerable<string>> Examples = new()
     {
-        [nameof(BlockCropProperties.RequiredNutrient)] = Enum.GetValues(typeof(EnumSoilNutrient)).Cast<EnumSoilNutrient>().Select(e => $"{(int)e} = {e}").ToList(),
+        [nameof(BlockCropProperties.RequiredNutrient)] = Enum.GetValues(typeof(EnumSoilNutrient)).Cast<EnumSoilNutrient>().Select(e => $"{(int)e} = {e}"),
     };
 
+    [JsonProperty(Order = 4)]
     public Dictionary<string, BlockCropProperties> Crops { get; set; } = new();
 
     public ConfigCropProperties(ICoreAPI api, ConfigCropProperties previousConfig = null)
@@ -22,16 +29,9 @@ public class ConfigCropProperties : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
+            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
 
-            Examples = previousConfig.Examples;
-
-            foreach ((string key, BlockCropProperties value) in previousConfig.Crops)
-            {
-                if (!Crops.ContainsKey(key))
-                {
-                    Crops.Add(key, value);
-                }
-            }
+            Crops.AddRange(previousConfig.Crops);
         }
 
         if (api != null && FillWithDefaultValues)

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
+using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration.ConfigDurability;
 
@@ -16,14 +17,9 @@ public class ConfigDurability : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
+            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
 
-            foreach ((string key, int value) in previousConfig.Durability)
-            {
-                if (!Durability.ContainsKey(key))
-                {
-                    Durability.Add(key, value);
-                }
-            }
+            Durability.AddRange(previousConfig.Durability);
         }
 
         if (api != null && FillWithDefaultValues)

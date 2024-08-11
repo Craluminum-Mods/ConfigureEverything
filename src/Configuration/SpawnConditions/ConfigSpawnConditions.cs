@@ -1,26 +1,34 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration.ConfigSpawnConditions;
 
 public class ConfigSpawnConditions : IModConfigWithDefaultValues
 {
+    [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
+
+    [JsonProperty(Order = 2)]
     public bool FillWithDefaultValues { get; set; }
 
-    public readonly string Documentation = "https://wiki.vintagestory.at/index.php/Modding:Entity_Json_Properties";
+    [JsonProperty(Order = 3)]
+    public string Documentation = "https://wiki.vintagestory.at/index.php/Modding:Entity_Json_Properties";
 
-    public readonly Dictionary<string, List<string>> Examples = new()
+    [JsonProperty(Order = 4)]
+    public Dictionary<string, List<string>> Examples = new()
     {
         [nameof(RuntimeSpawnConditions.ClimateValueMode)] = Enum.GetValues(typeof(EnumGetClimateMode)).Cast<EnumGetClimateMode>().Select(e => $"{(int)e} = {e}").ToList(),
         [nameof(RuntimeSpawnConditions.LightLevelType)] = Enum.GetValues(typeof(EnumLightLevelType)).Cast<EnumLightLevelType>().Select(e => $"{(int)e} = {e}").ToList(),
         [nameof(NatFloat.dist)] = Enum.GetValues(typeof(EnumDistribution)).Cast<EnumDistribution>().Select(e => $"{(int)e} = {e}").ToList(),
     };
 
+    [JsonProperty(Order = 5)]
     public Dictionary<string, SpawnConditions> EntityTypes { get; set; } = new();
 
     public ConfigSpawnConditions(ICoreAPI api, ConfigSpawnConditions previousConfig = null)
@@ -28,17 +36,9 @@ public class ConfigSpawnConditions : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
+            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
 
-            Documentation = previousConfig.Documentation;
-            Examples = previousConfig.Examples;
-
-            foreach ((string key, SpawnConditions value) in previousConfig.EntityTypes)
-            {
-                if (!EntityTypes.ContainsKey(key))
-                {
-                    EntityTypes.Add(key, value);
-                }
-            }
+            EntityTypes.AddRange(previousConfig.EntityTypes);
         }
 
         if (api != null && FillWithDefaultValues)
