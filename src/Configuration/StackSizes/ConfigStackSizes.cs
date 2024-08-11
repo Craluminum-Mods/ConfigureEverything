@@ -3,9 +3,10 @@ using Vintagestory.API.Common;
 
 namespace ConfigureEverything.Configuration.ConfigStackSizes;
 
-public class ConfigStackSizes : IModConfig
+public class ConfigStackSizes : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+    public bool FillWithDefaultValues { get; set; }
 
     public float StackSizeMultiplier { get; set; } = 1.0f;
     public Dictionary<string, int> BlockStackSizes { get; set; } = new();
@@ -36,13 +37,13 @@ public class ConfigStackSizes : IModConfig
             StackSizeMultiplier = previousConfig.StackSizeMultiplier;
         }
 
-        if (api != null)
+        if (api != null && FillWithDefaultValues)
         {
             FillDefault(api);
         }
     }
 
-    private void FillDefault(ICoreAPI api)
+    public void FillDefault(ICoreAPI api)
     {
         foreach ((string key, int value) in api.GetDefaultStackSizesForBlocks())
         {

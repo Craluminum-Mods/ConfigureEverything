@@ -4,9 +4,10 @@ using Vintagestory.API.Common;
 
 namespace ConfigureEverything.Configuration.ConfigDurability;
 
-public class ConfigDurability : IModConfig
+public class ConfigDurability : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+    public bool FillWithDefaultValues { get; set; }
 
     public Dictionary<string, int> Durability { get; set; } = new();
 
@@ -25,13 +26,13 @@ public class ConfigDurability : IModConfig
             }
         }
 
-        if (api != null)
+        if (api != null && FillWithDefaultValues)
         {
             FillDefault(api);
         }
     }
 
-    private void FillDefault(ICoreAPI api)
+    public void FillDefault(ICoreAPI api)
     {
         foreach (CollectibleObject obj in api.World.Collectibles.Where(x => x.Durability != 0))
         {

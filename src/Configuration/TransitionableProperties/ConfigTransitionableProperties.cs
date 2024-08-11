@@ -7,9 +7,10 @@ using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration.ConfigTransitionableProperties;
 
-public class ConfigTransitionableProperties : IModConfig
+public class ConfigTransitionableProperties : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+    public bool FillWithDefaultValues { get; set; }
 
     public readonly Dictionary<string, List<string>> Examples = new()
     {
@@ -31,13 +32,13 @@ public class ConfigTransitionableProperties : IModConfig
             ItemsTransitionableProperties.AddRange(previousConfig.ItemsTransitionableProperties);
         }
 
-        if (api != null)
+        if (api != null && FillWithDefaultValues)
         {
             FillDefault(api);
         }
     }
 
-    private void FillDefault(ICoreAPI api)
+    public void FillDefault(ICoreAPI api)
     {
         foreach (Block block in api.World.Blocks.Where(x => x.TransitionableProps != null && x.TransitionableProps?.Length != 0))
         {

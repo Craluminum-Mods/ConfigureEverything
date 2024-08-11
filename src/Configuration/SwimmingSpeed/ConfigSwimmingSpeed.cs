@@ -5,9 +5,10 @@ using Vintagestory.API.Common.Entities;
 
 namespace ConfigureEverything.Configuration.ConfigSwimmingSpeed;
 
-public class ConfigSwimmingSpeed : IModConfig
+public class ConfigSwimmingSpeed : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+    public bool FillWithDefaultValues { get; set; }
 
     public Dictionary<string, float> SpeedMultiplier { get; set; } = new();
 
@@ -26,13 +27,13 @@ public class ConfigSwimmingSpeed : IModConfig
             }
         }
 
-        if (api != null)
+        if (api != null && FillWithDefaultValues)
         {
             FillDefault(api);
         }
     }
 
-    private void FillDefault(ICoreAPI api)
+    public void FillDefault(ICoreAPI api)
     {
         foreach (EntityProperties key in api.World.EntityTypes.Where(x => x.IsBoat()).ToList())
         {

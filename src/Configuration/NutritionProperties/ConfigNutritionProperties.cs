@@ -5,9 +5,10 @@ using Vintagestory.API.Common;
 
 namespace ConfigureEverything.Configuration.ConfigNutritionProperties;
 
-public class ConfigNutritionProperties : IModConfig
+public class ConfigNutritionProperties : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+    public bool FillWithDefaultValues { get; set; }
 
     public readonly Dictionary<string, List<string>> Examples = new()
     {
@@ -33,13 +34,13 @@ public class ConfigNutritionProperties : IModConfig
             }
         }
 
-        if (api != null)
+        if (api != null && FillWithDefaultValues)
         {
             FillDefault(api);
         }
     }
 
-    private void FillDefault(ICoreAPI api)
+    public void FillDefault(ICoreAPI api)
     {
         foreach (CollectibleObject obj in api.World.Collectibles.Where(x => x.NutritionProps != null))
         {

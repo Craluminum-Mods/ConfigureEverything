@@ -7,9 +7,10 @@ using Vintagestory.API.MathTools;
 
 namespace ConfigureEverything.Configuration.ConfigSpawnConditions;
 
-public class ConfigSpawnConditions : IModConfig
+public class ConfigSpawnConditions : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+    public bool FillWithDefaultValues { get; set; }
 
     public readonly string Documentation = "https://wiki.vintagestory.at/index.php/Modding:Entity_Json_Properties";
 
@@ -40,13 +41,13 @@ public class ConfigSpawnConditions : IModConfig
             }
         }
 
-        if (api != null)
+        if (api != null && FillWithDefaultValues)
         {
             FillDefault(api);
         }
     }
 
-    private void FillDefault(ICoreAPI api)
+    public void FillDefault(ICoreAPI api)
     {
         foreach (EntityProperties entityType in api.World.EntityTypes)
         {

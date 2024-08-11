@@ -5,9 +5,10 @@ using Vintagestory.API.Common;
 
 namespace ConfigureEverything.Configuration.ConfigCropProperties;
 
-public class ConfigCropProperties : IModConfig
+public class ConfigCropProperties : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+    public bool FillWithDefaultValues { get; set; }
 
     public readonly Dictionary<string, List<string>> Examples = new()
     {
@@ -33,13 +34,13 @@ public class ConfigCropProperties : IModConfig
             }
         }
 
-        if (api != null)
+        if (api != null && FillWithDefaultValues)
         {
             FillDefault(api);
         }
     }
 
-    private void FillDefault(ICoreAPI api)
+    public void FillDefault(ICoreAPI api)
     {
         foreach (Block block in api.World.Blocks.Where(x => x.CropProps != null && x.CropProps?.Behaviors?.Length == 0))
         {
