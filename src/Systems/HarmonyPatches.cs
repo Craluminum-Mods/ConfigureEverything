@@ -3,8 +3,6 @@ using ConfigureEverything.Configuration.ConfigClimbingSpeed;
 using ConfigureEverything.Configuration.ConfigSwimmingSpeed;
 using HarmonyLib;
 using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
-using Vintagestory.GameContent;
 
 namespace ConfigureEverything.HarmonyPatches;
 
