@@ -1,5 +1,6 @@
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration.ConfigSpawnConditions;
 
@@ -12,16 +13,17 @@ public static class Patches
             return;
         }
 
-        foreach ((string key, SpawnConditions value) in config.EntityTypes)
+        foreach (EntityProperties entityType in api.World.EntityTypes)
         {
-            EntityProperties entityType = api.World.GetEntityType(new AssetLocation(key));
-
-            if (entityType == null || entityType.Code == null)
+            foreach ((string key, SpawnConditions value) in config.EntityTypes)
             {
-                continue;
-            };
-
-            entityType.Server.SpawnConditions = value;
+                if (WildcardUtil.Match(key, entityType.Code.ToString()))
+                {
+                    entityType.Server.SpawnConditions = value;
+                    break;
+                }
+            }
         }
+
     }
 }
