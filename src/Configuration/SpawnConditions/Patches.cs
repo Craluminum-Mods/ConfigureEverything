@@ -24,6 +24,5 @@ public static class Patches
                 }
             }
         }
-
     }
 }
