@@ -16,7 +16,7 @@ public class HarmonyPatches : ModSystem
 
     public override void Dispose()
     {
-        UnpatchAll();
+        HarmonyInstance.UnpatchAll(HarmonyInstance.Id);
     }
 
     public override void AssetsFinalize(ICoreAPI api)
@@ -41,20 +41,6 @@ public class HarmonyPatches : ModSystem
                 HarmonyInstance.Patch(original: Entity_GetInfoText_Patch.TargetMethod(), postfix: Entity_GetInfoText_Patch.GetPostfix());
                 HarmonyInstance.Patch(original: CollectibleObject_GetHeldItemInfo_Patch.TargetMethod(), postfix: CollectibleObject_GetHeldItemInfo_Patch.GetPostfix());
             }
-        }
-    }
-
-    private void UnpatchAll()
-    {
-        if (ConfigClimbingSpeed?.Enabled == true)
-        {
-            HarmonyInstance.Unpatch(original: EntityBehaviorControlledPhysics_Patch.TargetMethod(), HarmonyPatchType.All, HarmonyID);
-        }
-        if (ConfigSwimmingSpeed?.Enabled == true)
-        {
-            HarmonyInstance.Unpatch(original: EntityBoat_SpeedMultiplier_Patch.TargetMethod(), HarmonyPatchType.All, HarmonyID);
-            HarmonyInstance.Unpatch(original: Entity_GetInfoText_Patch.TargetMethod(), HarmonyPatchType.All, HarmonyID);
-            HarmonyInstance.Unpatch(original: CollectibleObject_GetHeldItemInfo_Patch.TargetMethod(), HarmonyPatchType.All, HarmonyID);
         }
     }
 }
