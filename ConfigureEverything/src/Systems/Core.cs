@@ -45,7 +45,7 @@ public class Core : ModSystem
             ConfigTransitionableProperties = ModConfig.ReadConfig<ConfigTransitionableProperties>(api, $"ConfigureEverything/{api.Side}/TransitionableProperties.json");
 
             if (ConfigCropProperties?.Enabled == true) api.ApplyPatches(ConfigCropProperties);
-            if (ConfigDurability?.Enabled == true) api.ApplyPatches(ConfigDurability);
+            if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(api);
             if (ConfigNutritionProperties?.Enabled == true) api.ApplyPatches(ConfigNutritionProperties);
             if (ConfigSpawnConditions?.Enabled == true) api.ApplyPatches(ConfigSpawnConditions);
             if (ConfigStackSizes?.Enabled == true) api.ApplyPatches(ConfigStackSizes);
