@@ -1,6 +1,7 @@
 using ConfigureEverything.Configuration;
 using ConfigureEverything.Configuration.ConfigCropProperties;
 using ConfigureEverything.Configuration.ConfigDurability;
+using ConfigureEverything.Configuration.ConfigMapColors;
 using ConfigureEverything.Configuration.ConfigNutritionProperties;
 using ConfigureEverything.Configuration.ConfigSpawnConditions;
 using ConfigureEverything.Configuration.ConfigStackSizes;
@@ -19,6 +20,18 @@ public class Core : ModSystem
     public static ConfigSpawnConditions ConfigSpawnConditions { get; private set; }
     public static ConfigStackSizes ConfigStackSizes { get; private set; }
     public static ConfigTransitionableProperties ConfigTransitionableProperties { get; private set; }
+
+    public static ConfigMapColors ConfigMapColors { get; private set; }
+
+    public override void StartPre(ICoreAPI api)
+    {
+        if (api.Side.IsClient())
+        {
+            ConfigMapColors = ModConfig.ReadConfig<ConfigMapColors>(api, $"ConfigureEverything/{api.Side}/MapColors.json");
+
+            if (ConfigMapColors?.Enabled == true) ConfigMapColors.ApplyPatches();
+        }        
+    }
 
     public override void AssetsFinalize(ICoreAPI api)
     {
