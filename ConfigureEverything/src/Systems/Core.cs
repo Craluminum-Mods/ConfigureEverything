@@ -11,6 +11,7 @@ public class Core : ModSystem
     public static ConfigMapColors ConfigMapColors { get; private set; }
 
     public static ConfigBlockFertility ConfigBlockFertility { get; private set; }
+    public static ConfigBlockMiningTier ConfigBlockMiningTier { get; private set; }
     public static ConfigBlockResistance ConfigBlockResistance { get; private set; }
     public static ConfigCropProperties ConfigCropProperties { get; private set; }
     public static ConfigDurability ConfigDurability { get; private set; }
@@ -34,6 +35,7 @@ public class Core : ModSystem
         if (api.Side.IsServer())
         {
             ConfigBlockFertility = ModConfig.ReadConfig<ConfigBlockFertility>(api, $"ConfigureEverything/{api.Side}/BlockFertility.json");
+            ConfigBlockMiningTier = ModConfig.ReadConfig<ConfigBlockMiningTier>(api, $"ConfigureEverything/{api.Side}/BlockMiningTier.json");
             ConfigBlockResistance = ModConfig.ReadConfig<ConfigBlockResistance>(api, $"ConfigureEverything/{api.Side}/BlockResistance.json");
             ConfigCropProperties = ModConfig.ReadConfig<ConfigCropProperties>(api, $"ConfigureEverything/{api.Side}/CropProperties.json");
             ConfigDurability = ModConfig.ReadConfig<ConfigDurability>(api, $"ConfigureEverything/{api.Side}/Durability.json");
@@ -47,6 +49,7 @@ public class Core : ModSystem
                 if (obj == null || obj.Code == null) continue;
 
                 if (ConfigBlockFertility?.Enabled == true) ConfigBlockFertility.ApplyPatches(obj);
+                if (ConfigBlockMiningTier?.Enabled == true) ConfigBlockMiningTier.ApplyPatches(obj);
                 if (ConfigBlockResistance?.Enabled == true) ConfigBlockResistance.ApplyPatches(obj);
                 if (ConfigCropProperties?.Enabled == true) ConfigCropProperties.ApplyPatches(obj);
                 if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(obj);
