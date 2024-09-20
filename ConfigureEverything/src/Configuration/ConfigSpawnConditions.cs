@@ -58,23 +58,21 @@ public class ConfigSpawnConditions : IModConfigWithDefaultValues
         }
     }
 
-    public void ApplyPatches(ICoreAPI api)
+    public void ApplyPatches(EntityProperties obj)
     {
         if (!EntityTypes.Any())
         {
             return;
         }
 
-        foreach (EntityProperties entityType in api.World.EntityTypes)
+        foreach ((string key, SpawnConditions value) in EntityTypes)
         {
-            foreach ((string key, SpawnConditions value) in EntityTypes)
+            if (WildcardUtil.Match(key, obj.Code.ToString()))
             {
-                if (WildcardUtil.Match(key, entityType.Code.ToString()))
-                {
-                    entityType.Server.SpawnConditions = value;
-                    break;
-                }
+                obj.Server.SpawnConditions = value;
+                break;
             }
         }
+
     }
 }

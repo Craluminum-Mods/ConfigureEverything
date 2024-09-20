@@ -56,10 +56,10 @@ public class Core : ModSystem
                 //if (ConfigTransitionableProperties?.Enabled == true) ConfigTransitionableProperties.ApplyPatches(api, obj);
             }
 
-            //foreach (EntityProperties type in api.World.EntityTypes)
-            //{
-            //    if (ConfigSpawnConditions?.Enabled == true) ConfigSpawnConditions.ApplyPatches(type);
-            //}
+            foreach (EntityProperties entityType in api.World.EntityTypes)
+            {
+                if (ConfigSpawnConditions?.Enabled == true) ConfigSpawnConditions.ApplyPatches(entityType);
+            }
         }
 
         api.World.Logger.Event("started '{0}' mod", Mod.Info.Name);
