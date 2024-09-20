@@ -44,12 +44,12 @@ public class Core : ModSystem
             ConfigStackSizes = ModConfig.ReadConfig<ConfigStackSizes>(api, $"ConfigureEverything/{api.Side}/StackSizes.json");
             ConfigTransitionableProperties = ModConfig.ReadConfig<ConfigTransitionableProperties>(api, $"ConfigureEverything/{api.Side}/TransitionableProperties.json");
 
-            if (ConfigCropProperties?.Enabled == true) api.ApplyPatches(ConfigCropProperties);
+            if (ConfigCropProperties?.Enabled == true) ConfigCropProperties.ApplyPatches(api);
             if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(api);
-            if (ConfigNutritionProperties?.Enabled == true) api.ApplyPatches(ConfigNutritionProperties);
-            if (ConfigSpawnConditions?.Enabled == true) api.ApplyPatches(ConfigSpawnConditions);
-            if (ConfigStackSizes?.Enabled == true) api.ApplyPatches(ConfigStackSizes);
-            if (ConfigTransitionableProperties?.Enabled == true) api.ApplyPatches(ConfigTransitionableProperties);
+            if (ConfigNutritionProperties?.Enabled == true) ConfigNutritionProperties.ApplyPatches(api);
+            if (ConfigSpawnConditions?.Enabled == true) ConfigSpawnConditions.ApplyPatches(api);
+            if (ConfigStackSizes?.Enabled == true) ConfigStackSizes.ApplyPatches(api);
+            if (ConfigTransitionableProperties?.Enabled == true) ConfigTransitionableProperties.ApplyPatches(api);
         }
 
         api.World.Logger.Event("started '{0}' mod", Mod.Info.Name);

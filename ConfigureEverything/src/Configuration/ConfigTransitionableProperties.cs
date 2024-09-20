@@ -68,4 +68,33 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
             }
         }
     }
+
+    public void ApplyPatches(ICoreAPI api)
+    {
+        if (BlocksTransitionableProperties?.Count != 0)
+        {
+            foreach ((string key, TransitionableProperties[] value) in BlocksTransitionableProperties)
+            {
+                Block block = api.World.GetBlock(new AssetLocation(key));
+
+                if (block != null && block.Code != null && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
+                {
+                    block.TransitionableProps = value;
+                }
+            }
+        }
+
+        if (ItemsTransitionableProperties?.Count != 0)
+        {
+            foreach ((string key, TransitionableProperties[] value) in ItemsTransitionableProperties)
+            {
+                Item item = api.World.GetItem(new AssetLocation(key));
+
+                if (item != null && item.Code != null && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
+                {
+                    item.TransitionableProps = value;
+                }
+            }
+        }
+    }
 }

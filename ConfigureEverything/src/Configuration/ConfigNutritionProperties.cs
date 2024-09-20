@@ -50,4 +50,24 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
             }
         }
     }
+
+    public void ApplyPatches(ICoreAPI api)
+    {
+        if (Food?.Count == 0)
+        {
+            return;
+        }
+
+        foreach ((string key, FoodNutritionProperties value) in Food)
+        {
+            CollectibleObject obj = api.GetCollectible(key);
+
+            if (obj == null || obj.Code == null)
+            {
+                continue;
+            };
+
+            obj.NutritionProps = value;
+        }
+    }
 }

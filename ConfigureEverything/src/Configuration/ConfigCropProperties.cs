@@ -52,4 +52,29 @@ public class ConfigCropProperties : IModConfigWithDefaultValues
             }
         }
     }
+
+    public void ApplyPatches(ICoreAPI api)
+    {
+        if (Crops?.Count == 0)
+        {
+            return;
+        }
+
+        foreach ((string key, BlockCropProperties value) in Crops)
+        {
+            Block[] blocks = api.World.SearchBlocks(new AssetLocation(key));
+
+            if (blocks?.Length == 0)
+            {
+                continue;
+            }
+
+            foreach (Block block in blocks)
+            {
+                CropBehavior[] behaviors = block.CropProps.Behaviors;
+                block.CropProps = value;
+                block.CropProps.Behaviors = behaviors;
+            }
+        }
+    }
 }
