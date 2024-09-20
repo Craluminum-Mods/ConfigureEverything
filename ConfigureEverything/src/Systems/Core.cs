@@ -49,7 +49,7 @@ public class Core : ModSystem
             {   
                 if (obj == null || obj.Code == null) continue;
 
-                //if (ConfigCropProperties?.Enabled == true) ConfigCropProperties.ApplyPatches(api, obj);
+                if (ConfigCropProperties?.Enabled == true) ConfigCropProperties.ApplyPatches(obj);
                 if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(obj);
                 //if (ConfigNutritionProperties?.Enabled == true) ConfigNutritionProperties.ApplyPatches(api, obj);
                 if (ConfigStackSizes?.Enabled == true) ConfigStackSizes.ApplyPatches(obj);

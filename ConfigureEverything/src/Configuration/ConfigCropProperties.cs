@@ -44,36 +44,32 @@ public class ConfigCropProperties : IModConfigWithDefaultValues
     {
         foreach (Block block in api.World.Blocks.Where(x => x.CropProps != null && x.CropProps?.Behaviors?.Length == 0))
         {
-            string _codeWildcard = block.Code.ToString().Replace(block.Code.EndVariant().ToString(), "*");
+            string code = block.Code.ToString()
+                .Replace("game:", "")
+                .Replace(block.Code.EndVariant(), "*");
 
-            if (!Crops.ContainsKey(_codeWildcard))
+            if (!Crops.ContainsKey(code))
             {
-                Crops.Add(_codeWildcard, block.CropProps);
+                Crops.Add(code, block.CropProps);
             }
         }
     }
 
-    public void ApplyPatches(ICoreAPI api)
+    public void ApplyPatches(CollectibleObject obj)
     {
-        if (Crops?.Count == 0)
+        if (obj is not Block block || !Crops.Any())
         {
             return;
         }
 
         foreach ((string key, BlockCropProperties value) in Crops)
         {
-            Block[] blocks = api.World.SearchBlocks(new AssetLocation(key));
-
-            if (blocks?.Length == 0)
-            {
-                continue;
-            }
-
-            foreach (Block block in blocks)
+            if (obj.WildCardMatch(key))
             {
                 CropBehavior[] behaviors = block.CropProps.Behaviors;
                 block.CropProps = value;
                 block.CropProps.Behaviors = behaviors;
+                break;
             }
         }
     }
