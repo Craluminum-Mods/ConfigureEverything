@@ -8,6 +8,7 @@ namespace ConfigureEverything.Configuration;
 public class ConfigToolTier : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+
     public bool FillWithDefaultValues { get; set; }
 
     public Dictionary<string, int> Blocks { get; set; } = new();

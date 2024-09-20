@@ -9,10 +9,13 @@ namespace ConfigureEverything.Configuration;
 public class ConfigStackSizes : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+
     public bool FillWithDefaultValues { get; set; }
 
     public float Multiplier { get; set; } = 1.0f;
+
     public Dictionary<string, int> Blocks { get; set; } = new();
+
     public Dictionary<string, int> Items { get; set; } = new();
 
     public ConfigStackSizes(ICoreAPI api, ConfigStackSizes previousConfig = null)

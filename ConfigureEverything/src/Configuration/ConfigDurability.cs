@@ -8,9 +8,11 @@ namespace ConfigureEverything.Configuration;
 public class ConfigDurability : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+
     public bool FillWithDefaultValues { get; set; }
 
     public Dictionary<string, int> Blocks { get; set; } = new();
+
     public Dictionary<string, int> Items { get; set; } = new();
 
     public ConfigDurability(ICoreAPI api, ConfigDurability previousConfig = null)

@@ -9,6 +9,7 @@ namespace ConfigureEverything.Configuration;
 public class ConfigBlockResistance : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+
     public bool FillWithDefaultValues { get; set; }
 
     public Dictionary<string, float> Blocks { get; set; } = new();

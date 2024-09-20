@@ -9,6 +9,7 @@ namespace ConfigureEverything.Configuration;
 public class ConfigBlockMiningTier : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+
     public bool FillWithDefaultValues { get; set; }
 
     public Dictionary<string, int> Blocks { get; set; } = new();

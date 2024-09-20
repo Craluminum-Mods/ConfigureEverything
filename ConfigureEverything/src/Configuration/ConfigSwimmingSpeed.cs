@@ -9,6 +9,7 @@ namespace ConfigureEverything.Configuration;
 public class ConfigSwimmingSpeed : IModConfigWithDefaultValues
 {
     public bool Enabled { get; set; }
+
     public bool FillWithDefaultValues { get; set; }
 
     public Dictionary<string, float> SpeedMultiplier { get; set; } = new();
