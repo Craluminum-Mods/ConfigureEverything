@@ -15,6 +15,7 @@ public class Core : ModSystem
     public static ConfigBlockResistance ConfigBlockResistance { get; private set; }
     public static ConfigCombustibleProperties ConfigCombustibleProperties { get; private set; }
     public static ConfigCropProperties ConfigCropProperties { get; private set; }
+    public static ConfigCrushingProperties ConfigCrushingProperties { get; private set; }
     public static ConfigDurability ConfigDurability { get; private set; }
     public static ConfigGrindingProperties ConfigGrindingProperties { get; private set; }
     public static ConfigItemDimensions ConfigItemDimensions { get; private set; }
@@ -44,6 +45,7 @@ public class Core : ModSystem
             ConfigBlockResistance = ModConfig.ReadConfig<ConfigBlockResistance>(api, $"ConfigureEverything/{api.Side}/BlockResistance.json");
             ConfigCombustibleProperties = ModConfig.ReadConfig<ConfigCombustibleProperties>(api, $"ConfigureEverything/{api.Side}/CombustibleProperties.json");
             ConfigCropProperties = ModConfig.ReadConfig<ConfigCropProperties>(api, $"ConfigureEverything/{api.Side}/CropProperties.json");
+            ConfigCrushingProperties = ModConfig.ReadConfig<ConfigCrushingProperties>(api, $"ConfigureEverything/{api.Side}/CrushingProperties.json");
             ConfigDurability = ModConfig.ReadConfig<ConfigDurability>(api, $"ConfigureEverything/{api.Side}/Durability.json");
             ConfigGrindingProperties = ModConfig.ReadConfig<ConfigGrindingProperties>(api, $"ConfigureEverything/{api.Side}/GrindingProperties.json");
             ConfigItemDimensions = ModConfig.ReadConfig<ConfigItemDimensions>(api, $"ConfigureEverything/{api.Side}/ItemDimensions.json");
@@ -63,6 +65,7 @@ public class Core : ModSystem
                 if (ConfigBlockResistance?.Enabled == true) ConfigBlockResistance.ApplyPatches(obj);
                 if (ConfigCombustibleProperties?.Enabled == true) ConfigCombustibleProperties.ApplyPatches(obj, api);
                 if (ConfigCropProperties?.Enabled == true) ConfigCropProperties.ApplyPatches(obj);
+                if (ConfigCrushingProperties?.Enabled == true) ConfigCrushingProperties.ApplyPatches(obj, api);
                 if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(obj);
                 if (ConfigGrindingProperties?.Enabled == true) ConfigGrindingProperties.ApplyPatches(obj, api);
                 if (ConfigItemDimensions?.Enabled == true) ConfigItemDimensions.ApplyPatches(obj);
