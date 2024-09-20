@@ -60,22 +60,22 @@ public class ConfigCombustibleProperties : IModConfigWithDefaultValues
 
             if (obj is Block && !Blocks.ContainsKey(code))
             {
-                CombustibleProperties combustibleProps = obj.CombustibleProps.Clone();
-                if (combustibleProps.SmeltedStack != null)
+                CombustibleProperties props = obj.CombustibleProps.Clone();
+                if (props.SmeltedStack != null)
                 {
-                    combustibleProps.SmeltedStack.ResolvedItemstack = null;
+                    props.SmeltedStack.ResolvedItemstack = null;
                 }
-                Blocks.Add(code, combustibleProps);
+                Blocks.Add(code, props);
             }
 
             if (obj is Item && !Items.ContainsKey(code))
             {
-                CombustibleProperties combustibleProps = obj.CombustibleProps.Clone();
-                if (combustibleProps.SmeltedStack != null)
+                CombustibleProperties props = obj.CombustibleProps.Clone();
+                if (props.SmeltedStack != null)
                 {
-                    combustibleProps.SmeltedStack.ResolvedItemstack = null;
+                    props.SmeltedStack.ResolvedItemstack = null;
                 }
-                Items.Add(code, combustibleProps);
+                Items.Add(code, props);
             }
         }
     }

@@ -62,16 +62,16 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
 
             if (obj is Block && !Blocks.ContainsKey(code))
             {
-                TransitionableProperties[] transitionableProps = obj.TransitionableProps;
-                transitionableProps.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);
-                Blocks.Add(code, transitionableProps);
+                TransitionableProperties[] props = obj.TransitionableProps;
+                props.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);
+                Blocks.Add(code, props);
             }
 
             if (obj is Item && !Items.ContainsKey(code))
             {
-                TransitionableProperties[] transitionableProps = obj.TransitionableProps;
-                transitionableProps.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);
-                Items.Add(code, transitionableProps);
+                TransitionableProperties[] props = obj.TransitionableProps;
+                props.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);
+                Items.Add(code, props);
             }
         }
     }

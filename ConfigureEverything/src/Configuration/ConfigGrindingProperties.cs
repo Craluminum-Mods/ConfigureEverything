@@ -15,7 +15,7 @@ public class ConfigGrindingProperties : IModConfigWithDefaultValues
     public bool FillWithDefaultValues { get; set; }
 
     [JsonProperty(Order = 3)]
-    public string Description => "Configure item to ground into something else, for example, grain => flour (in quern)";
+    public string Description => "Configure whether item can be ground into something else in quern";
 
     [JsonProperty(Order = 4)]
     public Dictionary<string, GrindingProperties> Blocks { get; set; } = new();
@@ -53,22 +53,22 @@ public class ConfigGrindingProperties : IModConfigWithDefaultValues
 
             if (obj is Block && !Blocks.ContainsKey(code))
             {
-                GrindingProperties grindingProps = obj.GrindingProps.Clone();
-                if (grindingProps.GroundStack != null)
+                GrindingProperties props = obj.GrindingProps.Clone();
+                if (props.GroundStack != null)
                 {
-                    grindingProps.GroundStack.ResolvedItemstack = null;
+                    props.GroundStack.ResolvedItemstack = null;
                 }
-                Blocks.Add(code, grindingProps);
+                Blocks.Add(code, props);
             }
 
             if (obj is Item && !Items.ContainsKey(code))
             {
-                GrindingProperties grindingProps = obj.GrindingProps.Clone();
-                if (grindingProps.GroundStack != null)
+                GrindingProperties props = obj.GrindingProps.Clone();
+                if (props.GroundStack != null)
                 {
-                    grindingProps.GroundStack.ResolvedItemstack = null;
+                    props.GroundStack.ResolvedItemstack = null;
                 }
-                Items.Add(code, grindingProps);
+                Items.Add(code, props);
             }
         }
     }
