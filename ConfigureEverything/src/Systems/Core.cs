@@ -44,12 +44,17 @@ public class Core : ModSystem
             ConfigStackSizes = ModConfig.ReadConfig<ConfigStackSizes>(api, $"ConfigureEverything/{api.Side}/StackSizes.json");
             ConfigTransitionableProperties = ModConfig.ReadConfig<ConfigTransitionableProperties>(api, $"ConfigureEverything/{api.Side}/TransitionableProperties.json");
 
-            if (ConfigCropProperties?.Enabled == true) ConfigCropProperties.ApplyPatches(api);
-            if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(api);
-            if (ConfigNutritionProperties?.Enabled == true) ConfigNutritionProperties.ApplyPatches(api);
-            if (ConfigSpawnConditions?.Enabled == true) ConfigSpawnConditions.ApplyPatches(api);
-            if (ConfigStackSizes?.Enabled == true) ConfigStackSizes.ApplyPatches(api);
-            if (ConfigTransitionableProperties?.Enabled == true) ConfigTransitionableProperties.ApplyPatches(api);
+            foreach (CollectibleObject obj in api.World.Collectibles)
+            {   
+                if (obj == null || obj.Code == null) continue;
+
+                //if (ConfigCropProperties?.Enabled == true) ConfigCropProperties.ApplyPatches(api, obj);
+                //if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(api, obj);
+                //if (ConfigNutritionProperties?.Enabled == true) ConfigNutritionProperties.ApplyPatches(api, obj);
+                //if (ConfigSpawnConditions?.Enabled == true) ConfigSpawnConditions.ApplyPatches(api, obj);
+                //if (ConfigStackSizes?.Enabled == true) ConfigStackSizes.ApplyPatches(obj);
+                //if (ConfigTransitionableProperties?.Enabled == true) ConfigTransitionableProperties.ApplyPatches(api, obj);
+            }
         }
 
         api.World.Logger.Event("started '{0}' mod", Mod.Info.Name);
