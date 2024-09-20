@@ -18,6 +18,7 @@ public class Core : ModSystem
     public static ConfigNutritionProperties ConfigNutritionProperties { get; private set; }
     public static ConfigSpawnConditions ConfigSpawnConditions { get; private set; }
     public static ConfigStackSizes ConfigStackSizes { get; private set; }
+    public static ConfigToolTier ConfigToolTier { get; private set; }
     public static ConfigTransitionableProperties ConfigTransitionableProperties { get; private set; }
 
     public override void StartPre(ICoreAPI api)
@@ -42,6 +43,7 @@ public class Core : ModSystem
             ConfigNutritionProperties = ModConfig.ReadConfig<ConfigNutritionProperties>(api, $"ConfigureEverything/{api.Side}/NutritionProperties.json");
             ConfigSpawnConditions = ModConfig.ReadConfig<ConfigSpawnConditions>(api, $"ConfigureEverything/{api.Side}/SpawnConditions.json");
             ConfigStackSizes = ModConfig.ReadConfig<ConfigStackSizes>(api, $"ConfigureEverything/{api.Side}/StackSizes.json");
+            ConfigToolTier = ModConfig.ReadConfig<ConfigToolTier>(api, $"ConfigureEverything/{api.Side}/ToolTier.json");
             ConfigTransitionableProperties = ModConfig.ReadConfig<ConfigTransitionableProperties>(api, $"ConfigureEverything/{api.Side}/TransitionableProperties.json");
 
             foreach (CollectibleObject obj in api.World.Collectibles)
@@ -55,6 +57,7 @@ public class Core : ModSystem
                 if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(obj);
                 if (ConfigNutritionProperties?.Enabled == true) ConfigNutritionProperties.ApplyPatches(obj);
                 if (ConfigStackSizes?.Enabled == true) ConfigStackSizes.ApplyPatches(obj);
+                if (ConfigToolTier?.Enabled == true) ConfigToolTier.ApplyPatches(obj);
                 if (ConfigTransitionableProperties?.Enabled == true) ConfigTransitionableProperties.ApplyPatches(obj, api);
             }
 

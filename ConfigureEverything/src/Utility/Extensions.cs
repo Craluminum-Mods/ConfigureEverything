@@ -72,4 +72,16 @@ public static class Extensions
         code = Regex.Replace(code, @"(\*-(\*-?)+)", "*");
         return code;
     }
+
+    public static string CodeWithoutDefaultDomain(this AssetLocation location)
+    {
+        string code = location.ToString();
+
+        if (location.Domain == "game")
+        {
+            code = code.Replace("game:", "");
+        }
+
+        return code;
+    }
 }
