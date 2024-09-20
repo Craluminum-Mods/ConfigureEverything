@@ -36,11 +36,6 @@ public static class Extensions
         return entityType.Class.ContainsAny(nameof(EntityBoat), "boat", "raft");
     }
 
-    public static CollectibleObject GetCollectible(this ICoreAPI api, string key)
-    {
-        return (CollectibleObject)api.World.GetBlock(new AssetLocation(key)) ?? api.World.GetItem(new AssetLocation(key));
-    }
-
     public static string GetCompactBlockCode(this AssetLocation location, bool removeOnlyDomain = false)
     {
         string code = location.ToString();

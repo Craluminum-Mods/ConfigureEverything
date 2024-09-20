@@ -4,7 +4,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 
-namespace ConfigureEverything.Configuration.ConfigStackSizes;
+namespace ConfigureEverything.Configuration;
 
 public class ConfigStackSizes : IModConfigWithDefaultValues
 {

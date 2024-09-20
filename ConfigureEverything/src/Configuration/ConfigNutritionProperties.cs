@@ -5,7 +5,7 @@ using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
 
-namespace ConfigureEverything.Configuration.ConfigNutritionProperties;
+namespace ConfigureEverything.Configuration;
 
 public class ConfigNutritionProperties : IModConfigWithDefaultValues
 {

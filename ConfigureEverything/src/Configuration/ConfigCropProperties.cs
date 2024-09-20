@@ -5,7 +5,7 @@ using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
 
-namespace ConfigureEverything.Configuration.ConfigCropProperties;
+namespace ConfigureEverything.Configuration;
 
 public class ConfigCropProperties : IModConfigWithDefaultValues
 {

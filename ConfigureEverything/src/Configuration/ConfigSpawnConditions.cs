@@ -7,7 +7,7 @@ using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
 
-namespace ConfigureEverything.Configuration.ConfigSpawnConditions;
+namespace ConfigureEverything.Configuration;
 
 public class ConfigSpawnConditions : IModConfigWithDefaultValues
 {

@@ -6,7 +6,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
 
-namespace ConfigureEverything.Configuration.ConfigTransitionableProperties;
+namespace ConfigureEverything.Configuration;
 
 public class ConfigTransitionableProperties : IModConfigWithDefaultValues
 {

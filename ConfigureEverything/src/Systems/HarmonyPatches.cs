@@ -1,6 +1,3 @@
-using ConfigureEverything.Configuration;
-using ConfigureEverything.Configuration.ConfigClimbingSpeed;
-using ConfigureEverything.Configuration.ConfigSwimmingSpeed;
 using HarmonyLib;
 using Vintagestory.API.Common;
 

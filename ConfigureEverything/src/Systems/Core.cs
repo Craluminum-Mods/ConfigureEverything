@@ -1,12 +1,4 @@
-using ConfigureEverything.Configuration;
-using ConfigureEverything.Configuration.ConfigCropProperties;
-using ConfigureEverything.Configuration.ConfigDurability;
-using ConfigureEverything.Configuration.ConfigMapColors;
-using ConfigureEverything.Configuration.ConfigNutritionProperties;
-using ConfigureEverything.Configuration.ConfigBlockResistance;
-using ConfigureEverything.Configuration.ConfigSpawnConditions;
-using ConfigureEverything.Configuration.ConfigStackSizes;
-using ConfigureEverything.Configuration.ConfigTransitionableProperties;
+global using ConfigureEverything.Configuration;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 

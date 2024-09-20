@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using Vintagestory.API.Common;
 
-namespace ConfigureEverything.Configuration.ConfigClimbingSpeed;
+namespace ConfigureEverything.Configuration;
 
 public class ConfigClimbingSpeed : IModConfig
 {

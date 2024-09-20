@@ -4,7 +4,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 
-namespace ConfigureEverything.Configuration.ConfigBlockResistance;
+namespace ConfigureEverything.Configuration;
 
 public class ConfigBlockResistance : IModConfigWithDefaultValues
 {

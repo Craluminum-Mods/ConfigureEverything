@@ -3,7 +3,7 @@ using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
 
-namespace ConfigureEverything.Configuration.ConfigDurability;
+namespace ConfigureEverything.Configuration;
 
 public class ConfigDurability : IModConfigWithDefaultValues
 {

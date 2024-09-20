@@ -4,7 +4,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Util;
 
-namespace ConfigureEverything.Configuration.ConfigSwimmingSpeed;
+namespace ConfigureEverything.Configuration;
 
 public class ConfigSwimmingSpeed : IModConfigWithDefaultValues
 {

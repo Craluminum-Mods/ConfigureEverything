@@ -3,7 +3,7 @@ using Vintagestory.API.Datastructures;
 using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 
-namespace ConfigureEverything.Configuration.ConfigMapColors;
+namespace ConfigureEverything.Configuration;
 
 public class ConfigMapColors : IModConfig
 {
