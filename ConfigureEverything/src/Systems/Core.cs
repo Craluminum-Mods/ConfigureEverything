@@ -16,6 +16,7 @@ public class Core : ModSystem
     public static ConfigCombustibleProperties ConfigCombustibleProperties { get; private set; }
     public static ConfigCropProperties ConfigCropProperties { get; private set; }
     public static ConfigDurability ConfigDurability { get; private set; }
+    public static ConfigItemDimensions ConfigItemDimensions { get; private set; }
     public static ConfigNutritionProperties ConfigNutritionProperties { get; private set; }
     public static ConfigSpawnConditions ConfigSpawnConditions { get; private set; }
     public static ConfigStackSizes ConfigStackSizes { get; private set; }
@@ -43,6 +44,7 @@ public class Core : ModSystem
             ConfigCombustibleProperties = ModConfig.ReadConfig<ConfigCombustibleProperties>(api, $"ConfigureEverything/{api.Side}/CombustibleProperties.json");
             ConfigCropProperties = ModConfig.ReadConfig<ConfigCropProperties>(api, $"ConfigureEverything/{api.Side}/CropProperties.json");
             ConfigDurability = ModConfig.ReadConfig<ConfigDurability>(api, $"ConfigureEverything/{api.Side}/Durability.json");
+            ConfigItemDimensions = ModConfig.ReadConfig<ConfigItemDimensions>(api, $"ConfigureEverything/{api.Side}/ItemDimensions.json");
             ConfigNutritionProperties = ModConfig.ReadConfig<ConfigNutritionProperties>(api, $"ConfigureEverything/{api.Side}/NutritionProperties.json");
             ConfigSpawnConditions = ModConfig.ReadConfig<ConfigSpawnConditions>(api, $"ConfigureEverything/{api.Side}/SpawnConditions.json");
             ConfigStackSizes = ModConfig.ReadConfig<ConfigStackSizes>(api, $"ConfigureEverything/{api.Side}/StackSizes.json");
@@ -60,6 +62,7 @@ public class Core : ModSystem
                 if (ConfigCombustibleProperties?.Enabled == true) ConfigCombustibleProperties.ApplyPatches(obj, api);
                 if (ConfigCropProperties?.Enabled == true) ConfigCropProperties.ApplyPatches(obj);
                 if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(obj);
+                if (ConfigItemDimensions?.Enabled == true) ConfigItemDimensions.ApplyPatches(obj);
                 if (ConfigNutritionProperties?.Enabled == true) ConfigNutritionProperties.ApplyPatches(obj);
                 if (ConfigStackSizes?.Enabled == true) ConfigStackSizes.ApplyPatches(obj);
                 if (ConfigToolMiningSpeed?.Enabled == true) ConfigToolMiningSpeed.ApplyPatches(obj);
