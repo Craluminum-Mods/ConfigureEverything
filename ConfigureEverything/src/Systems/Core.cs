@@ -51,7 +51,7 @@ public class Core : ModSystem
 
                 if (ConfigCropProperties?.Enabled == true) ConfigCropProperties.ApplyPatches(obj);
                 if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(obj);
-                //if (ConfigNutritionProperties?.Enabled == true) ConfigNutritionProperties.ApplyPatches(api, obj);
+                if (ConfigNutritionProperties?.Enabled == true) ConfigNutritionProperties.ApplyPatches(obj);
                 if (ConfigStackSizes?.Enabled == true) ConfigStackSizes.ApplyPatches(obj);
                 //if (ConfigTransitionableProperties?.Enabled == true) ConfigTransitionableProperties.ApplyPatches(api, obj);
             }

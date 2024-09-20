@@ -22,7 +22,10 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
     };
 
     [JsonProperty(Order = 4)]
-    public Dictionary<string, FoodNutritionProperties> Food { get; set; } = new();
+    public Dictionary<string, FoodNutritionProperties> Blocks { get; set; } = new();
+
+    [JsonProperty(Order = 5)]
+    public Dictionary<string, FoodNutritionProperties> Items { get; set; } = new();
 
     public ConfigNutritionProperties(ICoreAPI api, ConfigNutritionProperties previousConfig = null)
     {
@@ -31,7 +34,8 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
             Enabled = previousConfig.Enabled;
             FillWithDefaultValues = previousConfig.FillWithDefaultValues;
 
-            Food.AddRange(previousConfig.Food);
+            Blocks.AddRange(previousConfig.Blocks);
+            Items.AddRange(previousConfig.Items);
         }
 
         if (api != null && FillWithDefaultValues)
@@ -44,30 +48,49 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
     {
         foreach (CollectibleObject obj in api.World.Collectibles.Where(x => x.NutritionProps != null))
         {
-            if (!Food.ContainsKey(obj.Code.ToString()))
+            if (obj == null || obj.Code == null)
             {
-                Food.Add(obj.Code.ToString(), obj.NutritionProps);
+                return;
+            }
+
+            string code = obj.Code.ToString().Replace("game:", "");
+
+            if (obj is Block && !Blocks.ContainsKey(code))
+            {
+                Blocks.Add(code, obj.NutritionProps);
+            }
+
+            if (obj is Item && !Items.ContainsKey(code))
+            {
+                Items.Add(code, obj.NutritionProps);
             }
         }
     }
 
-    public void ApplyPatches(ICoreAPI api)
+    public void ApplyPatches(CollectibleObject obj)
     {
-        if (Food?.Count == 0)
+        switch (obj)
         {
-            return;
-        }
-
-        foreach ((string key, FoodNutritionProperties value) in Food)
-        {
-            CollectibleObject obj = api.GetCollectible(key);
-
-            if (obj == null || obj.Code == null)
-            {
-                continue;
-            };
-
-            obj.NutritionProps = value;
+            case Block when Blocks.Any():
+                foreach ((string key, FoodNutritionProperties value) in Blocks)
+                {
+                    if (obj.WildCardMatch(key))
+                    {
+                        obj.NutritionProps = value;
+                        break;
+                    }
+                }
+                break;
+            case Item when Items.Any():
+                foreach ((string key, FoodNutritionProperties value) in Items)
+                {
+                    if (obj.WildCardMatch(key))
+                    {
+                        obj.NutritionProps = value;
+                        break;
+                    }
+                }
+                break;
         }
     }
 }
