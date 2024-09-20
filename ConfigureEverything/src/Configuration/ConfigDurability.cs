@@ -34,19 +34,23 @@ public class ConfigDurability : IModConfigWithDefaultValues
 
     public void FillDefault(ICoreAPI api)
     {
-        foreach (Block obj in api.World.Blocks)
+        foreach (CollectibleObject obj in api.World.Collectibles)
         {
-            if (obj?.Code != null && obj.Durability != 0 && !Blocks.ContainsKey(obj.Code.ToString()))
+            if (obj == null || obj.Code == null || obj.Durability == 0)
             {
-                Blocks.Add(obj.Code.ToString(), obj.Durability);
+                continue;
             }
-        }
 
-        foreach (Item obj in api.World.Items)
-        {
-            if (obj?.Code != null && obj.Durability != 0 && !Items.ContainsKey(obj.Code.ToString()))
+            string code = obj.Code.CodeWithoutDefaultDomain();
+
+            if (obj is Block && !Blocks.ContainsKey(code))
             {
-                Items.Add(obj.Code.ToString(), obj.Durability);
+                Blocks.Add(code, obj.Durability);
+            }
+
+            if (obj is Item && !Items.ContainsKey(code))
+            {
+                Items.Add(code, obj.Durability);
             }
         }
     }

@@ -42,15 +42,18 @@ public class ConfigCropProperties : IModConfigWithDefaultValues
 
     public void FillDefault(ICoreAPI api)
     {
-        foreach (Block block in api.World.Blocks.Where(x => x.CropProps != null && x.CropProps?.Behaviors?.Length == 0))
+        foreach (Block obj in api.World.Blocks.Where(x => x.CropProps != null && x.CropProps?.Behaviors?.Length == 0))
         {
-            string code = block.Code.ToString()
-                .Replace("game:", "")
-                .Replace(block.Code.EndVariant(), "*");
+            if (obj == null || obj.Code == null || obj.Durability == 0)
+            {
+                continue;
+            }
+
+            string code = obj.Code.CodeWithoutDefaultDomain().Replace(obj.Code.EndVariant(), "*");
 
             if (!Crops.ContainsKey(code))
             {
-                Crops.Add(code, block.CropProps);
+                Crops.Add(code, obj.CropProps);
             }
         }
     }

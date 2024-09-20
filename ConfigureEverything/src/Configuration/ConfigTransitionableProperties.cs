@@ -48,21 +48,23 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
 
     public void FillDefault(ICoreAPI api)
     {
-        foreach (Block obj in api.World.Blocks.Where(x => x.TransitionableProps != null && x.TransitionableProps?.Length != 0))
+        foreach (CollectibleObject obj in api.World.Collectibles)
         {
-            string code = obj.Code.ToString().Replace("game:", "");
-            if (!Blocks.ContainsKey(code))
+            if (obj == null || obj.Code == null || obj.TransitionableProps == null || !obj.TransitionableProps.Any())
+            {
+                continue;
+            }
+
+            string code = obj.Code.CodeWithoutDefaultDomain();
+
+            if (obj is Block && !Blocks.ContainsKey(code))
             {
                 TransitionableProperties[] transitionableProps = obj.TransitionableProps;
                 transitionableProps.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);
                 Blocks.Add(code, transitionableProps);
             }
-        }
 
-        foreach (Item obj in api.World.Items.Where(x => x.TransitionableProps != null && x.TransitionableProps?.Length != 0))
-        {
-            string code = obj.Code.ToString().Replace("game:", "");
-            if (!Items.ContainsKey(code))
+            if (obj is Item && !Items.ContainsKey(code))
             {
                 TransitionableProperties[] transitionableProps = obj.TransitionableProps;
                 transitionableProps.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);

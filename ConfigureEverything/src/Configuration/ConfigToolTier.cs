@@ -34,19 +34,21 @@ public class ConfigToolTier : IModConfigWithDefaultValues
 
     public void FillDefault(ICoreAPI api)
     {
-        foreach (Block obj in api.World.Blocks)
+        foreach (CollectibleObject obj in api.World.Collectibles)
         {
-            string code = obj?.Code?.CodeWithoutDefaultDomain();
-            if (code != null && obj.ToolTier != 0 && !Blocks.ContainsKey(code))
+            if (obj == null || obj.Code == null || obj.ToolTier == 0)
+            {
+                continue;
+            }
+
+            string code = obj.Code.CodeWithoutDefaultDomain();
+
+            if (obj is Block && !Blocks.ContainsKey(code))
             {
                 Blocks.Add(code, obj.ToolTier);
             }
-        }
 
-        foreach (Item obj in api.World.Items)
-        {
-            string code = obj?.Code?.CodeWithoutDefaultDomain();
-            if (code != null && obj.ToolTier != 0 && !Items.ContainsKey(code))
+            if (obj is Item && !Items.ContainsKey(code))
             {
                 Items.Add(code, obj.ToolTier);
             }

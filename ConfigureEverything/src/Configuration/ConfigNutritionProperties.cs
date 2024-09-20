@@ -46,9 +46,9 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
 
     public void FillDefault(ICoreAPI api)
     {
-        foreach (CollectibleObject obj in api.World.Collectibles.Where(x => x.NutritionProps != null))
+        foreach (CollectibleObject obj in api.World.Collectibles)
         {
-            if (obj == null || obj.Code == null)
+            if (obj == null || obj.Code == null || obj.NutritionProps == null)
             {
                 return;
             }

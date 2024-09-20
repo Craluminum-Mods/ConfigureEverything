@@ -38,8 +38,25 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
 
     public void FillDefault(ICoreAPI api)
     {
-        Blocks.AddRange(GetDefaultStackSizesForBlocks(api));
-        Items.AddRange(GetDefaultStackSizesForItems(api));
+        foreach (CollectibleObject obj in api.World.Collectibles)
+        {
+            if (obj == null || obj.Code == null || obj is BlockMultiblock)
+            {
+                continue;
+            }
+
+            string code = obj.Code.CodeWithoutDefaultDomain();
+
+            if (obj is Block && !Blocks.ContainsKey(code))
+            {
+                Blocks.Add(code, obj.MaxStackSize);
+            }
+
+            if (obj is Item && !Items.ContainsKey(code))
+            {
+                Items.Add(code, obj.MaxStackSize);
+            }
+        }
     }
 
     public void ApplyPatches(CollectibleObject obj)
@@ -76,42 +93,5 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
                 }
                 break;
         }
-    }
-
-    public Dictionary<string, int> GetDefaultStackSizesForBlocks(ICoreAPI api)
-    {
-        Dictionary<string, int> stackSizes = new();
-
-        foreach (Block block in api.World.Blocks)
-        {
-            if (block is BlockMultiblock)
-            {
-                continue;
-            }
-
-            string code = block.Code?.ToString();
-            if (!string.IsNullOrEmpty(code) && !stackSizes.ContainsKey(code))
-            {
-                stackSizes.Add(code, block.MaxStackSize);
-            }
-        }
-
-        return stackSizes;
-    }
-
-    public Dictionary<string, int> GetDefaultStackSizesForItems(ICoreAPI api)
-    {
-        Dictionary<string, int> stackSizes = new();
-
-        foreach (Item item in api.World.Items)
-        {
-            string code = item.Code?.ToString();
-            if (!string.IsNullOrEmpty(code) && !stackSizes.ContainsKey(code))
-            {
-                stackSizes.Add(code, item.MaxStackSize);
-            }
-        }
-
-        return stackSizes;
     }
 }
