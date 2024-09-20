@@ -32,53 +32,47 @@ public class ConfigDurability : IModConfigWithDefaultValues
 
     public void FillDefault(ICoreAPI api)
     {
-        foreach (Block block in api.World.Blocks.Where(x => x.Durability != 0))
+        foreach (Block obj in api.World.Blocks)
         {
-            if (block?.Code != null && !Blocks.ContainsKey(block.Code.ToString()))
+            if (obj?.Code != null && obj.Durability != 0 && !Blocks.ContainsKey(obj.Code.ToString()))
             {
-                Blocks.Add(block.Code.ToString(), block.Durability);
+                Blocks.Add(obj.Code.ToString(), obj.Durability);
             }
         }
 
-        foreach (Item item in api.World.Items.Where(x => x.Durability != 0))
+        foreach (Item obj in api.World.Items)
         {
-            if (item?.Code != null && !Items.ContainsKey(item.Code.ToString()))
+            if (obj?.Code != null && obj.Durability != 0 && !Items.ContainsKey(obj.Code.ToString()))
             {
-                Items.Add(item.Code.ToString(), item.Durability);
+                Items.Add(obj.Code.ToString(), obj.Durability);
             }
         }
     }
 
-    public void ApplyPatches(ICoreAPI api)
+    public void ApplyPatches(CollectibleObject obj)
     {
-        if (Blocks.Any())
+        switch (obj)
         {
-            foreach (Block block in api.World.Blocks)
-            {
+            case Block when Blocks.Any():
                 foreach ((string key, int value) in Blocks)
                 {
-                    if (block?.Code != null && WildcardUtil.Match(key, block.Code.ToString()))
+                    if (obj.WildCardMatch(key))
                     {
-                        block.Durability = value;
+                        obj.Durability = value;
                         break;
                     }
                 }
-            }
-        }
-
-        if (Items.Any())
-        {
-            foreach (Item item in api.World.Items)
-            {
+                break;
+            case Item when Items.Any():
                 foreach ((string key, int value) in Items)
                 {
-                    if (item?.Code != null && WildcardUtil.Match(key, item.Code.ToString()))
+                    if (obj.WildCardMatch(key))
                     {
-                        item.Durability = value;
+                        obj.Durability = value;
                         break;
                     }
                 }
-            }
+                break;
         }
     }
 }

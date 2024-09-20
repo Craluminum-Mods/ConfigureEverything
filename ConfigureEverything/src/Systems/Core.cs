@@ -7,6 +7,7 @@ using ConfigureEverything.Configuration.ConfigSpawnConditions;
 using ConfigureEverything.Configuration.ConfigStackSizes;
 using ConfigureEverything.Configuration.ConfigTransitionableProperties;
 using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 
 [assembly: ModInfo(name: "Configure Everything", modID: "configureeverything", Side = "Universal", RequiredOnClient = false, RequiredOnServer = false)]
 
@@ -49,12 +50,16 @@ public class Core : ModSystem
                 if (obj == null || obj.Code == null) continue;
 
                 //if (ConfigCropProperties?.Enabled == true) ConfigCropProperties.ApplyPatches(api, obj);
-                //if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(api, obj);
+                if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(obj);
                 //if (ConfigNutritionProperties?.Enabled == true) ConfigNutritionProperties.ApplyPatches(api, obj);
-                //if (ConfigSpawnConditions?.Enabled == true) ConfigSpawnConditions.ApplyPatches(api, obj);
                 if (ConfigStackSizes?.Enabled == true) ConfigStackSizes.ApplyPatches(obj);
                 //if (ConfigTransitionableProperties?.Enabled == true) ConfigTransitionableProperties.ApplyPatches(api, obj);
             }
+
+            //foreach (EntityProperties type in api.World.EntityTypes)
+            //{
+            //    if (ConfigSpawnConditions?.Enabled == true) ConfigSpawnConditions.ApplyPatches(type);
+            //}
         }
 
         api.World.Logger.Event("started '{0}' mod", Mod.Info.Name);
