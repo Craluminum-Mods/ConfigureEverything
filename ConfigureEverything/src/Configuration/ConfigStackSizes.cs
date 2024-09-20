@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
 using Vintagestory.GameContent;
@@ -11,8 +12,8 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
     public bool FillWithDefaultValues { get; set; }
 
     public float StackSizeMultiplier { get; set; } = 1.0f;
-    public Dictionary<string, int> BlockStackSizes { get; set; } = new();
-    public Dictionary<string, int> ItemStackSizes { get; set; } = new();
+    public Dictionary<string, int> Blocks { get; set; } = new();
+    public Dictionary<string, int> Items { get; set; } = new();
 
     public ConfigStackSizes(ICoreAPI api, ConfigStackSizes previousConfig = null)
     {
@@ -22,8 +23,8 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
             FillWithDefaultValues = previousConfig.FillWithDefaultValues;
 
             StackSizeMultiplier = previousConfig.StackSizeMultiplier;
-            BlockStackSizes.AddRange(previousConfig.BlockStackSizes);
-            ItemStackSizes.AddRange(previousConfig.ItemStackSizes);
+            Blocks.AddRange(previousConfig.Blocks);
+            Items.AddRange(previousConfig.Items);
         }
 
         if (api != null && FillWithDefaultValues)
@@ -34,68 +35,43 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
 
     public void FillDefault(ICoreAPI api)
     {
-        foreach ((string key, int value) in GetDefaultStackSizesForBlocks(api))
-        {
-            if (!BlockStackSizes.ContainsKey(key))
-            {
-                BlockStackSizes.Add(key, value);
-            }
-        }
-
-        foreach ((string key, int value) in GetDefaultStackSizesForItems(api))
-        {
-            if (!ItemStackSizes.ContainsKey(key))
-            {
-                ItemStackSizes.Add(key, value);
-            }
-        }
+        Blocks.AddRange(GetDefaultStackSizesForBlocks(api));
+        Items.AddRange(GetDefaultStackSizesForItems(api));
     }
 
-    public void ApplyPatches(ICoreAPI api)
+    public void ApplyPatches(CollectibleObject obj)
     {
         if (StackSizeMultiplier is not 0 and not 1)
         {
-            foreach (CollectibleObject obj in api.World.Collectibles)
+            if (obj.MaxStackSize * obj.MaxStackSize != obj.MaxStackSize)
             {
-                if (obj.MaxStackSize * obj.MaxStackSize == obj.MaxStackSize)
-                {
-                    continue;
-                }
-
                 obj.MaxStackSize = (int)(obj.MaxStackSize * StackSizeMultiplier);
             }
-
             return;
         }
 
-        if (BlockStackSizes?.Count != 0)
+        switch (obj)
         {
-            foreach ((string key, int value) in BlockStackSizes)
-            {
-                Block block = api.World.GetBlock(new AssetLocation(key));
-
-                if (block == null || block.Code == null)
+            case Block when Blocks.Any():
+                foreach ((string key, int value) in Blocks)
                 {
-                    continue;
+                    if (obj.WildCardMatch(key))
+                    {
+                        obj.MaxStackSize = value;
+                        break;
+                    }
                 }
-
-                block.MaxStackSize = value;
-            }
-        }
-
-        if (ItemStackSizes?.Count != 0)
-        {
-            foreach ((string key, int value) in ItemStackSizes)
-            {
-                Item item = api.World.GetItem(new AssetLocation(key));
-
-                if (item == null || item.Code == null)
+                break;
+            case Item when Items.Any():
+                foreach ((string key, int value) in Items)
                 {
-                    continue;
+                    if (obj.WildCardMatch(key))
+                    {
+                        obj.MaxStackSize = value;
+                        break;
+                    }
                 }
-
-                item.MaxStackSize = value;
-            }
+                break;
         }
     }
 
