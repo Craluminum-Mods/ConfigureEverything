@@ -16,12 +16,15 @@ public class ConfigCropProperties : IModConfigWithDefaultValues
     public bool FillWithDefaultValues { get; set; }
 
     [JsonProperty(Order = 3)]
+    public string Description => "Configure crop growth time, required nutrients, allowed temperatures etc.";
+
+    [JsonProperty(Order = 4)]
     public Dictionary<string, IEnumerable<string>> Examples = new()
     {
         [nameof(BlockCropProperties.RequiredNutrient)] = Enum.GetValues(typeof(EnumSoilNutrient)).Cast<EnumSoilNutrient>().Select(e => $"{(int)e} = {e}"),
     };
 
-    [JsonProperty(Order = 4)]
+    [JsonProperty(Order = 5)]
     public Dictionary<string, BlockCropProperties> Crops { get; set; } = new();
 
     public ConfigCropProperties(ICoreAPI api, ConfigCropProperties previousConfig = null)

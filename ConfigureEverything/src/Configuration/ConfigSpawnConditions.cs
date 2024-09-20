@@ -18,10 +18,10 @@ public class ConfigSpawnConditions : IModConfigWithDefaultValues
     public bool FillWithDefaultValues { get; set; }
 
     [JsonProperty(Order = 3)]
-    public string Documentation = "https://wiki.vintagestory.at/index.php/Modding:Entity_Json_Properties";
+    public string Description => "Configure spawn conditions for creatures. Documentation: https://wiki.vintagestory.at/index.php/Modding:Entity_Json_Properties#p_spawnconditions";
 
     [JsonProperty(Order = 4)]
-    public Dictionary<string, IEnumerable<string>> Examples = new()
+    public Dictionary<string, IEnumerable<string>> Examples => new()
     {
         [nameof(RuntimeSpawnConditions.ClimateValueMode)] = Enum.GetValues(typeof(EnumGetClimateMode)).Cast<EnumGetClimateMode>().Select(e => $"{(int)e} = {e}"),
         [nameof(RuntimeSpawnConditions.LightLevelType)] = Enum.GetValues(typeof(EnumLightLevelType)).Cast<EnumLightLevelType>().Select(e => $"{(int)e} = {e}"),

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
@@ -8,10 +9,16 @@ namespace ConfigureEverything.Configuration;
 
 public class ConfigBlockFertility : IModConfigWithDefaultValues
 {
+    [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
+    [JsonProperty(Order = 2)]
     public bool FillWithDefaultValues { get; set; }
 
+    [JsonProperty(Order = 3)]
+    public string Description => "Configure what can grow on a block. 0 = nothing can grow, 10 = some tallgrass and small trees can be grow on it, 100 = all grass and trees can grow on it";
+
+    [JsonProperty(Order = 4)]
     public Dictionary<string, int> Blocks { get; set; } = new();
 
     public ConfigBlockFertility(ICoreAPI api, ConfigBlockFertility previousConfig = null)

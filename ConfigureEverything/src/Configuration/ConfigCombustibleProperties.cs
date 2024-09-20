@@ -16,15 +16,18 @@ public class ConfigCombustibleProperties : IModConfigWithDefaultValues
     public bool FillWithDefaultValues { get; set; }
 
     [JsonProperty(Order = 3)]
-    public readonly Dictionary<string, IEnumerable<string>> Examples = new()
+    public string Description => "Configure burning temperature and time, output stack (e.g. nugget => ingot) etc.";
+
+    [JsonProperty(Order = 4)]
+    public Dictionary<string, IEnumerable<string>> Examples => new()
     {
         [nameof(CombustibleProperties.SmeltingType)] = Enum.GetValues(typeof(EnumSmeltType)).Cast<EnumSmeltType>().Select(e => $"{(int)e} = {e}")
     };
 
-    [JsonProperty(Order = 4)]
+    [JsonProperty(Order = 5)]
     public Dictionary<string, CombustibleProperties> Blocks { get; set; } = new();
 
-    [JsonProperty(Order = 5)]
+    [JsonProperty(Order = 6)]
     public Dictionary<string, CombustibleProperties> Items { get; set; } = new();
 
     public ConfigCombustibleProperties(ICoreAPI api, ConfigCombustibleProperties previousConfig = null)

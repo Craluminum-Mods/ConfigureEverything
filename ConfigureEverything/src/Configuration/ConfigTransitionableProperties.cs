@@ -17,16 +17,19 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
     public bool FillWithDefaultValues { get; set; }
 
     [JsonProperty(Order = 3)]
-    public readonly Dictionary<string, IEnumerable<string>> Examples = new()
+    public string Description => "Configure perishing (e.g. food), drying (e.g. bowstaves), burning, curing, converting, ripening (e.g. cheese), melting (e.g. snowballs), hardening (e.g. glue) etc.";
+
+    [JsonProperty(Order = 4)]
+    public Dictionary<string, IEnumerable<string>> Examples => new()
     {
         [nameof(TransitionableProperties.Type)] = Enum.GetValues(typeof(EnumTransitionType)).Cast<EnumTransitionType>().Select(e => $"{(int)e} = {e}"),
         [nameof(TransitionableProperties.FreshHours.dist)] = Enum.GetValues(typeof(EnumDistribution)).Cast<EnumDistribution>().Select(e => $"{(int)e} = {e}"),
     };
 
-    [JsonProperty(Order = 4)]
+    [JsonProperty(Order = 5)]
     public Dictionary<string, TransitionableProperties[]> Blocks { get; set; } = new();
 
-    [JsonProperty(Order = 5)]
+    [JsonProperty(Order = 6)]
     public Dictionary<string, TransitionableProperties[]> Items { get; set; } = new();
 
     public ConfigTransitionableProperties(ICoreAPI api, ConfigTransitionableProperties previousConfig = null)

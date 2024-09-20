@@ -16,15 +16,18 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
     public bool FillWithDefaultValues { get; set; }
 
     [JsonProperty(Order = 3)]
-    public Dictionary<string, IEnumerable<string>> Examples = new()
+    public string Description => "Configure how much satiety, health and intoxication the food gives. Doesn't affect MEALS";
+
+    [JsonProperty(Order = 4)]
+    public Dictionary<string, IEnumerable<string>> Examples => new()
     {
         [nameof(FoodNutritionProperties.FoodCategory)] = Enum.GetValues(typeof(EnumFoodCategory)).Cast<EnumFoodCategory>().Select(e => $"{(int)e} = {e}"),
     };
 
-    [JsonProperty(Order = 4)]
+    [JsonProperty(Order = 5)]
     public Dictionary<string, FoodNutritionProperties> Blocks { get; set; } = new();
 
-    [JsonProperty(Order = 5)]
+    [JsonProperty(Order = 6)]
     public Dictionary<string, FoodNutritionProperties> Items { get; set; } = new();
 
     public ConfigNutritionProperties(ICoreAPI api, ConfigNutritionProperties previousConfig = null)

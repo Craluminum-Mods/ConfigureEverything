@@ -9,7 +9,7 @@ public class ConfigClimbingSpeed : IModConfig
     public bool Enabled { get; set; }
 
     [JsonProperty(Order = 2)]
-    public string Comment = "Ladder climbing speed";
+    public string Description => "Ladder climbing speed";
 
     [JsonProperty(Order = 3)]
     public float DefaultUpSpeed = 0.07f;

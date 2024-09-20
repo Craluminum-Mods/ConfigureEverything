@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
@@ -7,12 +8,19 @@ namespace ConfigureEverything.Configuration;
 
 public class ConfigDurability : IModConfigWithDefaultValues
 {
+    [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
+    [JsonProperty(Order = 2)]
     public bool FillWithDefaultValues { get; set; }
 
+    [JsonProperty(Order = 3)]
+    public string Description => "Configure how many uses this item has when used";
+
+    [JsonProperty(Order = 4)]
     public Dictionary<string, int> Blocks { get; set; } = new();
 
+    [JsonProperty(Order = 5)]
     public Dictionary<string, int> Items { get; set; } = new();
 
     public ConfigDurability(ICoreAPI api, ConfigDurability previousConfig = null)

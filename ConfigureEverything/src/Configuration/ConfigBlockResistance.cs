@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
@@ -8,10 +9,16 @@ namespace ConfigureEverything.Configuration;
 
 public class ConfigBlockResistance : IModConfigWithDefaultValues
 {
+    [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
+    [JsonProperty(Order = 2)]
     public bool FillWithDefaultValues { get; set; }
 
+    [JsonProperty(Order = 3)]
+    public string Description => "Configure how long it takes to break a block in seconds";
+
+    [JsonProperty(Order = 4)]
     public Dictionary<string, float> Blocks { get; set; } = new();
 
     public ConfigBlockResistance(ICoreAPI api, ConfigBlockResistance previousConfig = null)

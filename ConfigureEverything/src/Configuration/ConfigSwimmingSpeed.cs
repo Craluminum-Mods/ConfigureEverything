@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
@@ -8,10 +9,16 @@ namespace ConfigureEverything.Configuration;
 
 public class ConfigSwimmingSpeed : IModConfigWithDefaultValues
 {
+    [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
+    [JsonProperty(Order = 2)]
     public bool FillWithDefaultValues { get; set; }
 
+    [JsonProperty(Order = 3)]
+    public string Description => "Configure how fast rafts and boats can swim";
+
+    [JsonProperty(Order = 4)]
     public Dictionary<string, float> SpeedMultiplier { get; set; } = new();
 
     public ConfigSwimmingSpeed(ICoreAPI api, ConfigSwimmingSpeed previousConfig = null)

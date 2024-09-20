@@ -16,15 +16,18 @@ public class ConfigToolMiningSpeed : IModConfigWithDefaultValues
     public bool FillWithDefaultValues { get; set; }
 
     [JsonProperty(Order = 3)]
-    public readonly Dictionary<string, IEnumerable<string>> Examples = new()
+    public string Description => "Configure how fast a tool can break blocks";
+
+    [JsonProperty(Order = 4)]
+    public Dictionary<string, IEnumerable<string>> Examples => new()
     {
         [nameof(EnumBlockMaterial)] = Enum.GetValues(typeof(EnumBlockMaterial)).Cast<EnumBlockMaterial>().Select(e => $"{(int)e} = {e}"),
     };
 
-    [JsonProperty(Order = 4)]
+    [JsonProperty(Order = 5)]
     public Dictionary<string, Dictionary<EnumBlockMaterial, float>> Blocks { get; set; } = new();
 
-    [JsonProperty(Order = 5)]
+    [JsonProperty(Order = 6)]
     public Dictionary<string, Dictionary<EnumBlockMaterial, float>> Items { get; set; } = new();
 
     public ConfigToolMiningSpeed(ICoreAPI api, ConfigToolMiningSpeed previousConfig = null)

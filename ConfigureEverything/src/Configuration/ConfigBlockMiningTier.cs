@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
@@ -8,10 +9,16 @@ namespace ConfigureEverything.Configuration;
 
 public class ConfigBlockMiningTier : IModConfigWithDefaultValues
 {
+    [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
+    [JsonProperty(Order = 2)]
     public bool FillWithDefaultValues { get; set; }
 
+    [JsonProperty(Order = 3)]
+    public string Description => "Configure tool tier required to break a block";
+
+    [JsonProperty(Order = 4)]
     public Dictionary<string, int> Blocks { get; set; } = new();
 
     public ConfigBlockMiningTier(ICoreAPI api, ConfigBlockMiningTier previousConfig = null)
