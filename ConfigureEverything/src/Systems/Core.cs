@@ -53,7 +53,7 @@ public class Core : ModSystem
                 if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(obj);
                 if (ConfigNutritionProperties?.Enabled == true) ConfigNutritionProperties.ApplyPatches(obj);
                 if (ConfigStackSizes?.Enabled == true) ConfigStackSizes.ApplyPatches(obj);
-                //if (ConfigTransitionableProperties?.Enabled == true) ConfigTransitionableProperties.ApplyPatches(api, obj);
+                if (ConfigTransitionableProperties?.Enabled == true) ConfigTransitionableProperties.ApplyPatches(obj, api);
             }
 
             foreach (EntityProperties entityType in api.World.EntityTypes)

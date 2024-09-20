@@ -24,10 +24,10 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
     };
 
     [JsonProperty(Order = 4)]
-    public Dictionary<string, TransitionableProperties[]> BlocksTransitionableProperties { get; set; } = new();
+    public Dictionary<string, TransitionableProperties[]> Blocks { get; set; } = new();
 
     [JsonProperty(Order = 5)]
-    public Dictionary<string, TransitionableProperties[]> ItemsTransitionableProperties { get; set; } = new();
+    public Dictionary<string, TransitionableProperties[]> Items { get; set; } = new();
 
     public ConfigTransitionableProperties(ICoreAPI api, ConfigTransitionableProperties previousConfig = null)
     {
@@ -36,8 +36,8 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
             Enabled = previousConfig.Enabled;
             FillWithDefaultValues = previousConfig.FillWithDefaultValues;
 
-            BlocksTransitionableProperties.AddRange(previousConfig.BlocksTransitionableProperties);
-            ItemsTransitionableProperties.AddRange(previousConfig.ItemsTransitionableProperties);
+            Blocks.AddRange(previousConfig.Blocks);
+            Items.AddRange(previousConfig.Items);
         }
 
         if (api != null && FillWithDefaultValues)
@@ -48,53 +48,53 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
 
     public void FillDefault(ICoreAPI api)
     {
-        foreach (Block block in api.World.Blocks.Where(x => x.TransitionableProps != null && x.TransitionableProps?.Length != 0))
+        foreach (Block obj in api.World.Blocks.Where(x => x.TransitionableProps != null && x.TransitionableProps?.Length != 0))
         {
-            if (!BlocksTransitionableProperties.ContainsKey(block.Code.ToString()))
+            string code = obj.Code.ToString().Replace("game:", "");
+            if (!Blocks.ContainsKey(code))
             {
-                TransitionableProperties[] transitionableProps = block.TransitionableProps;
+                TransitionableProperties[] transitionableProps = obj.TransitionableProps;
                 transitionableProps.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);
-                BlocksTransitionableProperties.Add(block.Code.ToString(), transitionableProps);
+                Blocks.Add(code, transitionableProps);
             }
         }
 
-        foreach (Item item in api.World.Items.Where(x => x.TransitionableProps != null && x.TransitionableProps?.Length != 0))
+        foreach (Item obj in api.World.Items.Where(x => x.TransitionableProps != null && x.TransitionableProps?.Length != 0))
         {
-            if (!ItemsTransitionableProperties.ContainsKey(item.Code.ToString()))
+            string code = obj.Code.ToString().Replace("game:", "");
+            if (!Items.ContainsKey(code))
             {
-                TransitionableProperties[] transitionableProps = item.TransitionableProps;
+                TransitionableProperties[] transitionableProps = obj.TransitionableProps;
                 transitionableProps.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);
-                ItemsTransitionableProperties.Add(item.Code.ToString(), transitionableProps);
+                Items.Add(code, transitionableProps);
             }
         }
     }
 
-    public void ApplyPatches(ICoreAPI api)
+    public void ApplyPatches(CollectibleObject obj, ICoreAPI api)
     {
-        if (BlocksTransitionableProperties?.Count != 0)
+        switch (obj)
         {
-            foreach ((string key, TransitionableProperties[] value) in BlocksTransitionableProperties)
-            {
-                Block block = api.World.GetBlock(new AssetLocation(key));
-
-                if (block != null && block.Code != null && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
+            case Block when Blocks.Any():
+                foreach ((string key, TransitionableProperties[] value) in Blocks)
                 {
-                    block.TransitionableProps = value;
+                    if (obj.WildCardMatch(key) && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
+                    {
+                        obj.TransitionableProps = value;
+                        break;
+                    }
                 }
-            }
-        }
-
-        if (ItemsTransitionableProperties?.Count != 0)
-        {
-            foreach ((string key, TransitionableProperties[] value) in ItemsTransitionableProperties)
-            {
-                Item item = api.World.GetItem(new AssetLocation(key));
-
-                if (item != null && item.Code != null && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
+                break;
+            case Item when Items.Any():
+                foreach ((string key, TransitionableProperties[] value) in Items)
                 {
-                    item.TransitionableProps = value;
+                    if (obj.WildCardMatch(key) && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
+                    {
+                        obj.TransitionableProps = value;
+                        break;
+                    }
                 }
-            }
+                break;
         }
     }
 }
