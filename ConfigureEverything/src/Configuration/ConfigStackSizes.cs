@@ -11,7 +11,7 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
     public bool Enabled { get; set; }
     public bool FillWithDefaultValues { get; set; }
 
-    public float StackSizeMultiplier { get; set; } = 1.0f;
+    public float Multiplier { get; set; } = 1.0f;
     public Dictionary<string, int> Blocks { get; set; } = new();
     public Dictionary<string, int> Items { get; set; } = new();
 
@@ -22,7 +22,7 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
             Enabled = previousConfig.Enabled;
             FillWithDefaultValues = previousConfig.FillWithDefaultValues;
 
-            StackSizeMultiplier = previousConfig.StackSizeMultiplier;
+            Multiplier = previousConfig.Multiplier;
             Blocks.AddRange(previousConfig.Blocks);
             Items.AddRange(previousConfig.Items);
         }
@@ -41,11 +41,11 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
 
     public void ApplyPatches(CollectibleObject obj)
     {
-        if (StackSizeMultiplier is not 0 and not 1)
+        if (Multiplier is not 0 and not 1)
         {
             if (obj.MaxStackSize * obj.MaxStackSize != obj.MaxStackSize)
             {
-                obj.MaxStackSize = (int)(obj.MaxStackSize * StackSizeMultiplier);
+                obj.MaxStackSize = (int)(obj.MaxStackSize * Multiplier);
             }
             return;
         }
