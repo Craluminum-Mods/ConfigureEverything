@@ -3,6 +3,7 @@ using ConfigureEverything.Configuration.ConfigCropProperties;
 using ConfigureEverything.Configuration.ConfigDurability;
 using ConfigureEverything.Configuration.ConfigMapColors;
 using ConfigureEverything.Configuration.ConfigNutritionProperties;
+using ConfigureEverything.Configuration.ConfigBlockResistance;
 using ConfigureEverything.Configuration.ConfigSpawnConditions;
 using ConfigureEverything.Configuration.ConfigStackSizes;
 using ConfigureEverything.Configuration.ConfigTransitionableProperties;
@@ -18,6 +19,7 @@ public class Core : ModSystem
     public static ConfigCropProperties ConfigCropProperties { get; private set; }
     public static ConfigDurability ConfigDurability { get; private set; }
     public static ConfigNutritionProperties ConfigNutritionProperties { get; private set; }
+    public static ConfigBlockResistance ConfigBlockResistance { get; private set; }
     public static ConfigSpawnConditions ConfigSpawnConditions { get; private set; }
     public static ConfigStackSizes ConfigStackSizes { get; private set; }
     public static ConfigTransitionableProperties ConfigTransitionableProperties { get; private set; }
@@ -41,6 +43,7 @@ public class Core : ModSystem
             ConfigCropProperties = ModConfig.ReadConfig<ConfigCropProperties>(api, $"ConfigureEverything/{api.Side}/CropProperties.json");
             ConfigDurability = ModConfig.ReadConfig<ConfigDurability>(api, $"ConfigureEverything/{api.Side}/Durability.json");
             ConfigNutritionProperties = ModConfig.ReadConfig<ConfigNutritionProperties>(api, $"ConfigureEverything/{api.Side}/NutritionProperties.json");
+            ConfigBlockResistance = ModConfig.ReadConfig<ConfigBlockResistance>(api, $"ConfigureEverything/{api.Side}/BlockResistance.json");
             ConfigSpawnConditions = ModConfig.ReadConfig<ConfigSpawnConditions>(api, $"ConfigureEverything/{api.Side}/SpawnConditions.json");
             ConfigStackSizes = ModConfig.ReadConfig<ConfigStackSizes>(api, $"ConfigureEverything/{api.Side}/StackSizes.json");
             ConfigTransitionableProperties = ModConfig.ReadConfig<ConfigTransitionableProperties>(api, $"ConfigureEverything/{api.Side}/TransitionableProperties.json");
@@ -52,6 +55,7 @@ public class Core : ModSystem
                 if (ConfigCropProperties?.Enabled == true) ConfigCropProperties.ApplyPatches(obj);
                 if (ConfigDurability?.Enabled == true) ConfigDurability.ApplyPatches(obj);
                 if (ConfigNutritionProperties?.Enabled == true) ConfigNutritionProperties.ApplyPatches(obj);
+                if (ConfigBlockResistance?.Enabled == true) ConfigBlockResistance.ApplyPatches(obj);
                 if (ConfigStackSizes?.Enabled == true) ConfigStackSizes.ApplyPatches(obj);
                 if (ConfigTransitionableProperties?.Enabled == true) ConfigTransitionableProperties.ApplyPatches(obj, api);
             }
