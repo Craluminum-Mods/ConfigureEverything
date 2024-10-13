@@ -47,11 +47,6 @@ public class ConfigCropProperties : IModConfigWithDefaultValues
     {
         foreach (Block obj in api.World.Blocks.Where(x => x.CropProps != null && x.CropProps?.Behaviors?.Length == 0))
         {
-            if (obj == null || obj.Code == null || obj.Durability == 0)
-            {
-                continue;
-            }
-
             string code = obj.Code.CodeWithoutDefaultDomain().Replace(obj.Code.EndVariant(), "*");
 
             if (!Crops.ContainsKey(code))
