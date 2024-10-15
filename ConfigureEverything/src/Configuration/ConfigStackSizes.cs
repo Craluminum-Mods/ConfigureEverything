@@ -54,16 +54,16 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
                 continue;
             }
 
-            string code = obj.Code.CodeWithoutDefaultDomain();
+            string code = obj.Code.GetCompactCode().ToString();
 
-            if (obj is Block && !Blocks.ContainsKey(code))
+            switch (obj)
             {
-                Blocks.Add(code, obj.MaxStackSize);
-            }
-
-            if (obj is Item && !Items.ContainsKey(code))
-            {
-                Items.Add(code, obj.MaxStackSize);
+                case Block when !Blocks.ContainsKey(code):
+                    Blocks.Add(code, obj.MaxStackSize);
+                    break;
+                case Item when !Items.ContainsKey(code):
+                    Items.Add(code, obj.MaxStackSize);
+                    break;
             }
         }
     }
@@ -84,7 +84,7 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
             case Block when Blocks.Any():
                 foreach ((string key, int value) in Blocks)
                 {
-                    if (obj.WildCardMatch(key))
+                    if (obj.WildCardMatchExt(key))
                     {
                         obj.MaxStackSize = value;
                         break;
@@ -94,7 +94,7 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
             case Item when Items.Any():
                 foreach ((string key, int value) in Items)
                 {
-                    if (obj.WildCardMatch(key))
+                    if (obj.WildCardMatchExt(key))
                     {
                         obj.MaxStackSize = value;
                         break;

@@ -57,21 +57,26 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
             {
                 continue;
             }
+            
+            // no need for compact code here
+            string code = obj.Code.ToString();
 
-            string code = obj.Code.CodeWithoutDefaultDomain();
-
-            if (obj is Block && !Blocks.ContainsKey(code))
+            switch (obj)
             {
-                TransitionableProperties[] props = obj.TransitionableProps;
-                props.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);
-                Blocks.Add(code, props);
-            }
-
-            if (obj is Item && !Items.ContainsKey(code))
-            {
-                TransitionableProperties[] props = obj.TransitionableProps;
-                props.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);
-                Items.Add(code, props);
+                case Block when !Blocks.ContainsKey(code):
+                    {
+                        TransitionableProperties[] props = obj.TransitionableProps;
+                        props.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);
+                        Blocks.Add(code, props);
+                        break;
+                    }
+                case Item when !Items.ContainsKey(code):
+                    {
+                        TransitionableProperties[] props = obj.TransitionableProps;
+                        props.Foreach(x => x.TransitionedStack.ResolvedItemstack = null);
+                        Items.Add(code, props);
+                        break;
+                    }
             }
         }
     }
@@ -83,7 +88,7 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
             case Block when Blocks.Any():
                 foreach ((string key, TransitionableProperties[] value) in Blocks)
                 {
-                    if (obj.WildCardMatch(key) && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
+                    if (obj.WildCardMatchExt(key) && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
                     {
                         obj.TransitionableProps = value;
                         break;
@@ -93,7 +98,7 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
             case Item when Items.Any():
                 foreach ((string key, TransitionableProperties[] value) in Items)
                 {
-                    if (obj.WildCardMatch(key) && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
+                    if (obj.WildCardMatchExt(key) && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
                     {
                         obj.TransitionableProps = value;
                         break;

@@ -67,12 +67,11 @@ public class ConfigSpawnConditions : IModConfigWithDefaultValues
 
         foreach ((string key, SpawnConditions value) in EntityTypes)
         {
-            if (WildcardUtil.Match(key, obj.Code.ToString()))
+            if (obj.WildCardMatchExt(key))
             {
                 obj.Server.SpawnConditions = value;
                 break;
             }
         }
-
     }
 }

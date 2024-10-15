@@ -49,26 +49,31 @@ public class ConfigCrushingProperties : IModConfigWithDefaultValues
                 continue;
             }
 
-            string code = obj.Code.CodeWithoutDefaultDomain();
+            // no need for compact code here
+            string code = obj.Code.ToString();
 
-            if (obj is Block && !Blocks.ContainsKey(code))
+            switch (obj)
             {
-                CrushingProperties props = obj.CrushingProps.Clone();
-                if (props.CrushedStack != null)
-                {
-                    props.CrushedStack.ResolvedItemstack = null;
-                }
-                Blocks.Add(code, props);
-            }
-
-            if (obj is Item && !Items.ContainsKey(code))
-            {
-                CrushingProperties props = obj.CrushingProps.Clone();
-                if (props.CrushedStack != null)
-                {
-                    props.CrushedStack.ResolvedItemstack = null;
-                }
-                Items.Add(code, props);
+                case Block when !Blocks.ContainsKey(code):
+                    {
+                        CrushingProperties props = obj.CrushingProps.Clone();
+                        if (props.CrushedStack != null)
+                        {
+                            props.CrushedStack.ResolvedItemstack = null;
+                        }
+                        Blocks.Add(code, props);
+                        break;
+                    }
+                case Item when !Items.ContainsKey(code):
+                    {
+                        CrushingProperties props = obj.CrushingProps.Clone();
+                        if (props.CrushedStack != null)
+                        {
+                            props.CrushedStack.ResolvedItemstack = null;
+                        }
+                        Items.Add(code, props);
+                        break;
+                    }
             }
         }
     }
@@ -80,7 +85,7 @@ public class ConfigCrushingProperties : IModConfigWithDefaultValues
             case Block when Blocks.Any():
                 foreach ((string key, CrushingProperties value) in Blocks)
                 {
-                    if (!obj.WildCardMatch(key))
+                    if (!obj.WildCardMatchExt(key))
                     {
                         continue;
                     }
@@ -97,7 +102,7 @@ public class ConfigCrushingProperties : IModConfigWithDefaultValues
             case Item when Items.Any():
                 foreach ((string key, CrushingProperties value) in Items)
                 {
-                    if (!obj.WildCardMatch(key))
+                    if (!obj.WildCardMatchExt(key))
                     {
                         continue;
                     }

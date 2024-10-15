@@ -46,7 +46,7 @@ public class ConfigBlockFertility : IModConfigWithDefaultValues
                 continue;
             }
 
-            string code = block.Code.GetCompactBlockCode();
+            string code = block.Code.GetCompactCode().ToString();
             if (!Blocks.ContainsKey(code))
             {
                 Blocks.Add(code, block.Fertility);
@@ -63,7 +63,7 @@ public class ConfigBlockFertility : IModConfigWithDefaultValues
 
         foreach ((string key, int value) in Blocks)
         {
-            if (obj.WildCardMatch(key))
+            if (obj.WildCardMatchExt(key))
             {
                 block.Fertility = value;
                 break;

@@ -49,26 +49,31 @@ public class ConfigGrindingProperties : IModConfigWithDefaultValues
                 continue;
             }
 
-            string code = obj.Code.CodeWithoutDefaultDomain();
+            // no need for compact code here
+            string code = obj.Code.ToString();
 
-            if (obj is Block && !Blocks.ContainsKey(code))
+            switch (obj)
             {
-                GrindingProperties props = obj.GrindingProps.Clone();
-                if (props.GroundStack != null)
-                {
-                    props.GroundStack.ResolvedItemstack = null;
-                }
-                Blocks.Add(code, props);
-            }
-
-            if (obj is Item && !Items.ContainsKey(code))
-            {
-                GrindingProperties props = obj.GrindingProps.Clone();
-                if (props.GroundStack != null)
-                {
-                    props.GroundStack.ResolvedItemstack = null;
-                }
-                Items.Add(code, props);
+                case Block when !Blocks.ContainsKey(code):
+                    {
+                        GrindingProperties props = obj.GrindingProps.Clone();
+                        if (props.GroundStack != null)
+                        {
+                            props.GroundStack.ResolvedItemstack = null;
+                        }
+                        Blocks.Add(code, props);
+                        break;
+                    }
+                case Item when !Items.ContainsKey(code):
+                    {
+                        GrindingProperties props = obj.GrindingProps.Clone();
+                        if (props.GroundStack != null)
+                        {
+                            props.GroundStack.ResolvedItemstack = null;
+                        }
+                        Items.Add(code, props);
+                        break;
+                    }
             }
         }
     }
@@ -80,7 +85,7 @@ public class ConfigGrindingProperties : IModConfigWithDefaultValues
             case Block when Blocks.Any():
                 foreach ((string key, GrindingProperties value) in Blocks)
                 {
-                    if (!obj.WildCardMatch(key))
+                    if (!obj.WildCardMatchExt(key))
                     {
                         continue;
                     }
@@ -97,7 +102,7 @@ public class ConfigGrindingProperties : IModConfigWithDefaultValues
             case Item when Items.Any():
                 foreach ((string key, GrindingProperties value) in Items)
                 {
-                    if (!obj.WildCardMatch(key))
+                    if (!obj.WildCardMatchExt(key))
                     {
                         continue;
                     }

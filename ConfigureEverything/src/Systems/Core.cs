@@ -2,8 +2,6 @@ global using ConfigureEverything.Configuration;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 
-[assembly: ModInfo(name: "Configure Everything", modID: "configureeverything", Side = "Universal", RequiredOnClient = false, RequiredOnServer = false)]
-
 namespace ConfigureEverything;
 
 public class Core : ModSystem

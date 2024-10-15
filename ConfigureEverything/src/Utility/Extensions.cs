@@ -1,8 +1,8 @@
 using Newtonsoft.Json.Linq;
-using System.Text.RegularExpressions;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 
 namespace ConfigureEverything;
@@ -36,52 +36,27 @@ public static class Extensions
         return entityType.Class.ContainsAny(nameof(EntityBoat), "boat", "raft");
     }
 
-    public static string GetCompactBlockCode(this AssetLocation location, bool removeOnlyDomain = false)
+    public static AssetLocation GetCompactCode(this AssetLocation location)
     {
-        string code = location.ToString();
-
-        if (location.Domain == "game")
+        if (location.FirstCodePart() == location.SecondCodePart())
         {
-            code = code.Replace("game:", "");
+            return location;
         }
-
-        if (removeOnlyDomain)
-        {
-            return code;
-        }
-
-        if (code.Contains("-north")) code = code.Replace("-north", "-*");
-        if (code.Contains("-east")) code = code.Replace("-east", "-*");
-        if (code.Contains("-south")) code = code.Replace("-south", "-*");
-        if (code.Contains("-west")) code = code.Replace("-west", "-*");
-        if (code.Contains("-up")) code = code.Replace("-up", "-*");
-        if (code.Contains("-down")) code = code.Replace("-down", "-*");
-
-        if (code.Contains("-base")) code = code.Replace("-base", "-*");
-        if (code.Contains("-top")) code = code.Replace("-top", "-*");
-        if (code.Contains("-middle")) code = code.Replace("-middle", "-*");
-        if (code.Contains("-bottom")) code = code.Replace("-bottom", "-*");
-
-        if (code.Contains("-snow")) code = code.Replace("-snow", "-*");
-        if (code.Contains("-free")) code = code.Replace("-free", "-*");
-
-        // replace a number or a row of numbers with wildcard
-        code = Regex.Replace(code, @"\d+(-\d+)*", "*");
-
-        // replace a row of wildcards with wildcard
-        code = Regex.Replace(code, @"(\*-(\*-?)+)", "*");
-        return code;
+        return location.CopyWithPath(location.FirstCodePart() + "-*");
     }
 
-    public static string CodeWithoutDefaultDomain(this AssetLocation location)
+    public static bool WildCardMatchExt(this CollectibleObject obj, AssetLocation location)
     {
-        string code = location.ToString();
+        return obj.WildCardMatch(location);
+    }
 
-        if (location.Domain == "game")
-        {
-            code = code.Replace("game:", "");
-        }
+    public static bool WildCardMatchExt(this CollectibleObject obj, string location)
+    {
+        return obj.WildCardMatch(AssetLocation.Create(location));
+    }
 
-        return code;
+    public static bool WildCardMatchExt(this EntityProperties obj, string location)
+    {
+        return WildcardUtil.Match(location, obj.Code.ToString());
     }
 }

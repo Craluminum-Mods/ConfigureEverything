@@ -56,16 +56,17 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
                 return;
             }
 
-            string code = obj.Code.ToString().Replace("game:", "");
+            // no need for compact code here
+            string code = obj.Code.ToString();
 
-            if (obj is Block && !Blocks.ContainsKey(code))
+            switch (obj)
             {
-                Blocks.Add(code, obj.NutritionProps);
-            }
-
-            if (obj is Item && !Items.ContainsKey(code))
-            {
-                Items.Add(code, obj.NutritionProps);
+                case Block when !Blocks.ContainsKey(code):
+                    Blocks.Add(code, obj.NutritionProps);
+                    break;
+                case Item when !Items.ContainsKey(code):
+                    Items.Add(code, obj.NutritionProps);
+                    break;
             }
         }
     }
@@ -77,7 +78,7 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
             case Block when Blocks.Any():
                 foreach ((string key, FoodNutritionProperties value) in Blocks)
                 {
-                    if (obj.WildCardMatch(key))
+                    if (obj.WildCardMatchExt(key))
                     {
                         obj.NutritionProps = value;
                         break;
@@ -87,7 +88,7 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
             case Item when Items.Any():
                 foreach ((string key, FoodNutritionProperties value) in Items)
                 {
-                    if (obj.WildCardMatch(key))
+                    if (obj.WildCardMatchExt(key))
                     {
                         obj.NutritionProps = value;
                         break;

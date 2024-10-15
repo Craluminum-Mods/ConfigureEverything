@@ -49,16 +49,17 @@ public class ConfigToolTier : IModConfigWithDefaultValues
                 continue;
             }
 
-            string code = obj.Code.CodeWithoutDefaultDomain();
+            // no need for compact code here
+            string code = obj.Code.ToString();
 
-            if (obj is Block && !Blocks.ContainsKey(code))
+            switch (obj)
             {
-                Blocks.Add(code, obj.ToolTier);
-            }
-
-            if (obj is Item && !Items.ContainsKey(code))
-            {
-                Items.Add(code, obj.ToolTier);
+                case Block when !Blocks.ContainsKey(code):
+                    Blocks.Add(code, obj.ToolTier);
+                    break;
+                case Item when !Items.ContainsKey(code):
+                    Items.Add(code, obj.ToolTier);
+                    break;
             }
         }
     }
@@ -70,7 +71,7 @@ public class ConfigToolTier : IModConfigWithDefaultValues
             case Block when Blocks.Any():
                 foreach ((string key, int value) in Blocks)
                 {
-                    if (obj.WildCardMatch(key))
+                    if (obj.WildCardMatchExt(key))
                     {
                         obj.ToolTier = value;
                         break;
@@ -80,7 +81,7 @@ public class ConfigToolTier : IModConfigWithDefaultValues
             case Item when Items.Any():
                 foreach ((string key, int value) in Items)
                 {
-                    if (obj.WildCardMatch(key))
+                    if (obj.WildCardMatchExt(key))
                     {
                         obj.ToolTier = value;
                         break;

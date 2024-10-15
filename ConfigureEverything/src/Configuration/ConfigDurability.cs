@@ -49,16 +49,17 @@ public class ConfigDurability : IModConfigWithDefaultValues
                 continue;
             }
 
-            string code = obj.Code.CodeWithoutDefaultDomain();
+            // no need for compact code here
+            string code = obj.Code.ToString();
 
-            if (obj is Block && !Blocks.ContainsKey(code))
+            switch (obj)
             {
-                Blocks.Add(code, obj.Durability);
-            }
-
-            if (obj is Item && !Items.ContainsKey(code))
-            {
-                Items.Add(code, obj.Durability);
+                case Block when !Blocks.ContainsKey(code):
+                    Blocks.Add(code, obj.Durability);
+                    break;
+                case Item when !Items.ContainsKey(code):
+                    Items.Add(code, obj.Durability);
+                    break;
             }
         }
     }
@@ -70,7 +71,7 @@ public class ConfigDurability : IModConfigWithDefaultValues
             case Block when Blocks.Any():
                 foreach ((string key, int value) in Blocks)
                 {
-                    if (obj.WildCardMatch(key))
+                    if (obj.WildCardMatchExt(key))
                     {
                         obj.Durability = value;
                         break;
@@ -80,7 +81,7 @@ public class ConfigDurability : IModConfigWithDefaultValues
             case Item when Items.Any():
                 foreach ((string key, int value) in Items)
                 {
-                    if (obj.WildCardMatch(key))
+                    if (obj.WildCardMatchExt(key))
                     {
                         obj.Durability = value;
                         break;

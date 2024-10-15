@@ -46,7 +46,7 @@ public class ConfigBlockResistance : IModConfigWithDefaultValues
                 continue;
             }
 
-            string code = block.Code.GetCompactBlockCode();
+            string code = block.Code.GetCompactCode().ToString();
             if (!Blocks.ContainsKey(code))
             {
                 Blocks.Add(code, block.Resistance);
@@ -63,7 +63,7 @@ public class ConfigBlockResistance : IModConfigWithDefaultValues
 
         foreach ((string key, float value) in Blocks)
         {
-            if (obj.WildCardMatch(key))
+            if (obj.WildCardMatchExt(key))
             {
                 block.Resistance = value;
                 break;

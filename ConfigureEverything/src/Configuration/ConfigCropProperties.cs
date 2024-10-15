@@ -47,7 +47,7 @@ public class ConfigCropProperties : IModConfigWithDefaultValues
     {
         foreach (Block obj in api.World.Blocks.Where(x => x.CropProps != null && x.CropProps?.Behaviors?.Length == 0))
         {
-            string code = obj.Code.CodeWithoutDefaultDomain().Replace(obj.Code.EndVariant(), "*");
+            string code = obj.Code.ToString().Replace(obj.Code.EndVariant(), "*");
 
             if (!Crops.ContainsKey(code))
             {
@@ -65,7 +65,7 @@ public class ConfigCropProperties : IModConfigWithDefaultValues
 
         foreach ((string key, BlockCropProperties value) in Crops)
         {
-            if (obj.WildCardMatch(key))
+            if (obj.WildCardMatchExt(key))
             {
                 CropBehavior[] behaviors = block.CropProps.Behaviors;
                 block.CropProps = value;

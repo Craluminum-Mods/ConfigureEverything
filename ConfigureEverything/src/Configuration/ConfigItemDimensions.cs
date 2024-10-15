@@ -53,16 +53,16 @@ public class ConfigItemDimensions : IModConfigWithDefaultValues
                 continue;
             }
 
-            string code = obj.Code.CodeWithoutDefaultDomain();
+            string code = obj.Code.GetCompactCode().ToString();
 
-            if (obj is Block && !Blocks.ContainsKey(code))
+            switch (obj)
             {
-                Blocks.Add(code, obj.Dimensions);
-            }
-
-            if (obj is Item && !Items.ContainsKey(code))
-            {
-                Items.Add(code, obj.Dimensions);
+                case Block when !Blocks.ContainsKey(code):
+                    Blocks.Add(code, obj.Dimensions);
+                    break;
+                case Item when !Items.ContainsKey(code):
+                    Items.Add(code, obj.Dimensions);
+                    break;
             }
         }
     }
@@ -74,7 +74,7 @@ public class ConfigItemDimensions : IModConfigWithDefaultValues
             case Block when Blocks.Any():
                 foreach ((string key, Size3f value) in Blocks)
                 {
-                    if (obj.WildCardMatch(key))
+                    if (obj.WildCardMatchExt(key))
                     {
                         obj.Dimensions = value;
                         break;
@@ -84,7 +84,7 @@ public class ConfigItemDimensions : IModConfigWithDefaultValues
             case Item when Items.Any():
                 foreach ((string key, Size3f value) in Items)
                 {
-                    if (obj.WildCardMatch(key))
+                    if (obj.WildCardMatchExt(key))
                     {
                         obj.Dimensions = value;
                         break;
