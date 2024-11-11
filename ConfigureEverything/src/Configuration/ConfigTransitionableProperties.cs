@@ -8,13 +8,13 @@ using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration;
 
-public class ConfigTransitionableProperties : IModConfigWithDefaultValues
+public class ConfigTransitionableProperties : IModConfigWithAutoFill
 {
     [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
     [JsonProperty(Order = 2)]
-    public bool FillWithDefaultValues { get; set; }
+    public bool AutoFill { get; set; }
 
     [JsonProperty(Order = 3)]
     public string Description => "Configure perishing (e.g. food), drying (e.g. bowstaves), burning, curing, converting, ripening (e.g. cheese), melting (e.g. snowballs), hardening (e.g. glue) etc.";
@@ -37,13 +37,13 @@ public class ConfigTransitionableProperties : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
-            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
+            AutoFill = previousConfig.AutoFill;
 
             Blocks.AddRange(previousConfig.Blocks);
             Items.AddRange(previousConfig.Items);
         }
 
-        if (api != null && FillWithDefaultValues)
+        if (api != null && AutoFill)
         {
             FillDefault(api);
         }

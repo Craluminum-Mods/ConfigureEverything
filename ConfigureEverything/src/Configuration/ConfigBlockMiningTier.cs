@@ -7,13 +7,13 @@ using Vintagestory.GameContent;
 
 namespace ConfigureEverything.Configuration;
 
-public class ConfigBlockMiningTier : IModConfigWithDefaultValues
+public class ConfigBlockMiningTier : IModConfigWithAutoFill
 {
     [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
     [JsonProperty(Order = 2)]
-    public bool FillWithDefaultValues { get; set; }
+    public bool AutoFill { get; set; }
 
     [JsonProperty(Order = 3)]
     public string Description => "Configure tool tier required to break a block";
@@ -26,12 +26,12 @@ public class ConfigBlockMiningTier : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
-            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
+            AutoFill = previousConfig.AutoFill;
 
             Blocks.AddRange(previousConfig.Blocks);
         }
 
-        if (api != null && FillWithDefaultValues)
+        if (api != null && AutoFill)
         {
             FillDefault(api);
         }

@@ -7,13 +7,13 @@ using Vintagestory.GameContent;
 
 namespace ConfigureEverything.Configuration;
 
-public class ConfigBlockFertility : IModConfigWithDefaultValues
+public class ConfigBlockFertility : IModConfigWithAutoFill
 {
     [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
     [JsonProperty(Order = 2)]
-    public bool FillWithDefaultValues { get; set; }
+    public bool AutoFill { get; set; }
 
     [JsonProperty(Order = 3)]
     public string Description => "Configure what can grow on a block. 0 = nothing can grow, 10 = some tallgrass and small trees can be grow on it, 100 = all grass and trees can grow on it";
@@ -26,12 +26,12 @@ public class ConfigBlockFertility : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
-            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
+            AutoFill = previousConfig.AutoFill;
 
             Blocks.AddRange(previousConfig.Blocks);
         }
 
-        if (api != null && FillWithDefaultValues)
+        if (api != null && AutoFill)
         {
             FillDefault(api);
         }

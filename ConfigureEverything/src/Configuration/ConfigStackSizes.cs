@@ -7,13 +7,13 @@ using Vintagestory.GameContent;
 
 namespace ConfigureEverything.Configuration;
 
-public class ConfigStackSizes : IModConfigWithDefaultValues
+public class ConfigStackSizes : IModConfigWithAutoFill
 {
     [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
     [JsonProperty(Order = 2)]
-    public bool FillWithDefaultValues { get; set; }
+    public bool AutoFill { get; set; }
 
     [JsonProperty(Order = 3)]
     public string Description => "Configure max amount of item that one default inventory slot can hold";
@@ -32,14 +32,14 @@ public class ConfigStackSizes : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
-            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
+            AutoFill = previousConfig.AutoFill;
 
             Multiplier = previousConfig.Multiplier;
             Blocks.AddRange(previousConfig.Blocks);
             Items.AddRange(previousConfig.Items);
         }
 
-        if (api != null && FillWithDefaultValues)
+        if (api != null && AutoFill)
         {
             FillDefault(api);
         }

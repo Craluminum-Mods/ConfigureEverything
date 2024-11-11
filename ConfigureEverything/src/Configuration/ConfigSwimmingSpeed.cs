@@ -7,13 +7,13 @@ using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration;
 
-public class ConfigSwimmingSpeed : IModConfigWithDefaultValues
+public class ConfigSwimmingSpeed : IModConfigWithAutoFill
 {
     [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
     [JsonProperty(Order = 2)]
-    public bool FillWithDefaultValues { get; set; }
+    public bool AutoFill { get; set; }
 
     [JsonProperty(Order = 3)]
     public string Description => "Configure how fast rafts and boats can swim";
@@ -26,12 +26,12 @@ public class ConfigSwimmingSpeed : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
-            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
+            AutoFill = previousConfig.AutoFill;
 
             SpeedMultiplier.AddRange(previousConfig.SpeedMultiplier);
         }
 
-        if (api != null && FillWithDefaultValues)
+        if (api != null && AutoFill)
         {
             FillDefault(api);
         }

@@ -2,9 +2,9 @@ using Vintagestory.API.Common;
 
 namespace ConfigureEverything.Configuration;
 
-public interface IModConfigWithDefaultValues : IModConfig
+public interface IModConfigWithAutoFill : IModConfig
 {
-    bool FillWithDefaultValues { get; set; }
+    bool AutoFill { get; set; }
 
     void FillDefault(ICoreAPI api);
 }

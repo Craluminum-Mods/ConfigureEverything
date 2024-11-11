@@ -7,13 +7,13 @@ using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration;
 
-public class ConfigItemDimensions : IModConfigWithDefaultValues
+public class ConfigItemDimensions : IModConfigWithAutoFill
 {
     [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
     [JsonProperty(Order = 2)]
-    public bool FillWithDefaultValues { get; set; }
+    public bool AutoFill { get; set; }
 
     [JsonProperty(Order = 3)]
     public string Description => "Some containers (e.g. crucible) can fit only items with certain dimensions. Default dimensions are { 0.5, 0.5, 0.5 }";
@@ -29,13 +29,13 @@ public class ConfigItemDimensions : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
-            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
+            AutoFill = previousConfig.AutoFill;
 
             Blocks.AddRange(previousConfig.Blocks);
             Items.AddRange(previousConfig.Items);
         }
 
-        if (api != null && FillWithDefaultValues)
+        if (api != null && AutoFill)
         {
             FillDefault(api);
         }

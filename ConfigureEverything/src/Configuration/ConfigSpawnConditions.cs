@@ -9,13 +9,13 @@ using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration;
 
-public class ConfigSpawnConditions : IModConfigWithDefaultValues
+public class ConfigSpawnConditions : IModConfigWithAutoFill
 {
     [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
     [JsonProperty(Order = 2)]
-    public bool FillWithDefaultValues { get; set; }
+    public bool AutoFill { get; set; }
 
     [JsonProperty(Order = 3)]
     public string Description => "Configure spawn conditions for creatures. Documentation: https://wiki.vintagestory.at/index.php/Modding:Entity_Json_Properties#p_spawnconditions";
@@ -36,12 +36,12 @@ public class ConfigSpawnConditions : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
-            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
+            AutoFill = previousConfig.AutoFill;
 
             EntityTypes.AddRange(previousConfig.EntityTypes);
         }
 
-        if (api != null && FillWithDefaultValues)
+        if (api != null && AutoFill)
         {
             FillDefault(api);
         }

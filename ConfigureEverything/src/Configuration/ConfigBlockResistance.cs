@@ -7,13 +7,13 @@ using Vintagestory.GameContent;
 
 namespace ConfigureEverything.Configuration;
 
-public class ConfigBlockResistance : IModConfigWithDefaultValues
+public class ConfigBlockResistance : IModConfigWithAutoFill
 {
     [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
     [JsonProperty(Order = 2)]
-    public bool FillWithDefaultValues { get; set; }
+    public bool AutoFill { get; set; }
 
     [JsonProperty(Order = 3)]
     public string Description => "Configure how long it takes to break a block in seconds";
@@ -26,12 +26,12 @@ public class ConfigBlockResistance : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
-            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
+            AutoFill = previousConfig.AutoFill;
 
             Blocks.AddRange(previousConfig.Blocks);
         }
 
-        if (api != null && FillWithDefaultValues)
+        if (api != null && AutoFill)
         {
             FillDefault(api);
         }

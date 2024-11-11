@@ -7,13 +7,13 @@ using Vintagestory.API.Util;
 
 namespace ConfigureEverything.Configuration;
 
-public class ConfigNutritionProperties : IModConfigWithDefaultValues
+public class ConfigNutritionProperties : IModConfigWithAutoFill
 {
     [JsonProperty(Order = 1)]
     public bool Enabled { get; set; }
 
     [JsonProperty(Order = 2)]
-    public bool FillWithDefaultValues { get; set; }
+    public bool AutoFill { get; set; }
 
     [JsonProperty(Order = 3)]
     public string Description => "Configure how much satiety, health and intoxication the food gives. Doesn't affect MEALS";
@@ -35,13 +35,13 @@ public class ConfigNutritionProperties : IModConfigWithDefaultValues
         if (previousConfig != null)
         {
             Enabled = previousConfig.Enabled;
-            FillWithDefaultValues = previousConfig.FillWithDefaultValues;
+            AutoFill = previousConfig.AutoFill;
 
             Blocks.AddRange(previousConfig.Blocks);
             Items.AddRange(previousConfig.Items);
         }
 
-        if (api != null && FillWithDefaultValues)
+        if (api != null && AutoFill)
         {
             FillDefault(api);
         }
