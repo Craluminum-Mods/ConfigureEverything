@@ -3,7 +3,6 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Util;
-using Vintagestory.GameContent;
 
 namespace ConfigureEverything;
 
@@ -31,11 +30,6 @@ public static class Extensions
         return false;
     }
 
-    public static bool IsBoat(this EntityProperties entityType)
-    {
-        return entityType.Class.ContainsAny(nameof(EntityBoat), "boat", "raft");
-    }
-
     public static AssetLocation GetCompactCode(this AssetLocation location)
     {
         if (location.FirstCodePart() == location.SecondCodePart())
@@ -47,16 +41,16 @@ public static class Extensions
 
     public static bool WildCardMatchExt(this CollectibleObject obj, AssetLocation location)
     {
-        return obj.WildCardMatch(location);
+        return WildcardUtil.Match(location, obj.Code);
     }
 
     public static bool WildCardMatchExt(this CollectibleObject obj, string location)
     {
-        return obj.WildCardMatch(AssetLocation.Create(location));
+        return WildcardUtil.Match(AssetLocation.Create(location), obj.Code);
     }
 
     public static bool WildCardMatchExt(this EntityProperties obj, string location)
     {
-        return WildcardUtil.Match(location, obj.Code.ToString());
+        return WildcardUtil.Match(AssetLocation.Create(location), obj.Code);
     }
 }
