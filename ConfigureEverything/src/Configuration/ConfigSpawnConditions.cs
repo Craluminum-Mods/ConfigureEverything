@@ -29,7 +29,7 @@ public class ConfigSpawnConditions : IModConfigWithAutoFill
     };
 
     [JsonProperty(Order = 5)]
-    public Dictionary<string, SpawnConditions> EntityTypes { get; set; } = new();
+    public Dictionary<string, SpawnConditions> EntityTypes { get; set; } = [];
 
     public ConfigSpawnConditions(ICoreAPI api, ConfigSpawnConditions previousConfig = null)
     {
@@ -51,23 +51,23 @@ public class ConfigSpawnConditions : IModConfigWithAutoFill
     {
         foreach (EntityProperties entityType in api.World.EntityTypes)
         {
-            if (entityType?.Server?.SpawnConditions != null && !EntityTypes.ContainsKey(entityType.Code.ToString()))
+            if (entityType?.Server?.SpawnConditions != null && !EntityTypes.ContainsKey(entityType.Code.ToShortString()))
             {
-                EntityTypes.Add(entityType.Code.ToString(), entityType.Server.SpawnConditions);
+                EntityTypes.Add(entityType.Code.ToShortString(), entityType.Server.SpawnConditions);
             }
         }
     }
 
     public void ApplyPatches(EntityProperties obj)
     {
-        if (!EntityTypes.Any())
+        if (EntityTypes.Count == 0)
         {
             return;
         }
 
         foreach ((string key, SpawnConditions value) in EntityTypes)
         {
-            if (obj.WildCardMatchExt(key))
+            if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
             {
                 obj.Server.SpawnConditions = value;
                 break;

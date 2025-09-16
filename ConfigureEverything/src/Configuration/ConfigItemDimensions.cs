@@ -19,10 +19,10 @@ public class ConfigItemDimensions : IModConfigWithAutoFill
     public string Description => "Some containers (e.g. crucible) can fit only items with certain dimensions. Default dimensions are { 0.5, 0.5, 0.5 }";
 
     [JsonProperty(Order = 4)]
-    public Dictionary<string, Size3f> Blocks { get; set; } = new();
+    public Dictionary<string, Size3f> Blocks { get; set; } = [];
 
     [JsonProperty(Order = 5)]
-    public Dictionary<string, Size3f> Items { get; set; } = new();
+    public Dictionary<string, Size3f> Items { get; set; } = [];
 
     public ConfigItemDimensions(ICoreAPI api, ConfigItemDimensions previousConfig = null)
     {
@@ -53,7 +53,7 @@ public class ConfigItemDimensions : IModConfigWithAutoFill
                 continue;
             }
 
-            string code = obj.Code.GetCompactCode().ToString();
+            string code = obj.Code.ToShortString();
 
             switch (obj)
             {
@@ -71,20 +71,20 @@ public class ConfigItemDimensions : IModConfigWithAutoFill
     {
         switch (obj)
         {
-            case Block when Blocks.Any():
+            case Block when Blocks.Count != 0:
                 foreach ((string key, Size3f value) in Blocks)
                 {
-                    if (obj.WildCardMatchExt(key))
+                    if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         obj.Dimensions = value;
                         break;
                     }
                 }
                 break;
-            case Item when Items.Any():
+            case Item when Items.Count != 0:
                 foreach ((string key, Size3f value) in Items)
                 {
-                    if (obj.WildCardMatchExt(key))
+                    if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         obj.Dimensions = value;
                         break;

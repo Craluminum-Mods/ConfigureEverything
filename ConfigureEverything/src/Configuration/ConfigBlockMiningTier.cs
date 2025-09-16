@@ -19,7 +19,7 @@ public class ConfigBlockMiningTier : IModConfigWithAutoFill
     public string Description => "Configure tool tier required to break a block";
 
     [JsonProperty(Order = 4)]
-    public Dictionary<string, int> Blocks { get; set; } = new();
+    public Dictionary<string, int> Blocks { get; set; } = [];
 
     public ConfigBlockMiningTier(ICoreAPI api, ConfigBlockMiningTier previousConfig = null)
     {
@@ -46,7 +46,7 @@ public class ConfigBlockMiningTier : IModConfigWithAutoFill
                 continue;
             }
 
-            string code = block.Code.GetCompactCode().ToString();
+            string code = block.Code.ToShortString();
             if (!Blocks.ContainsKey(code))
             {
                 Blocks.Add(code, block.RequiredMiningTier);
@@ -56,14 +56,14 @@ public class ConfigBlockMiningTier : IModConfigWithAutoFill
 
     public void ApplyPatches(CollectibleObject obj)
     {
-        if (obj is not Block block || !Blocks.Any())
+        if (obj is not Block block || Blocks.Count == 0)
         {
             return;
         }
 
         foreach ((string key, int value) in Blocks)
         {
-            if (obj.WildCardMatchExt(key))
+            if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
             {
                 block.RequiredMiningTier = value;
                 break;

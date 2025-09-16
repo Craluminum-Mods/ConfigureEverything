@@ -25,10 +25,10 @@ public class ConfigCombustibleProperties : IModConfigWithAutoFill
     };
 
     [JsonProperty(Order = 5)]
-    public Dictionary<string, CombustibleProperties> Blocks { get; set; } = new();
+    public Dictionary<string, CombustibleProperties> Blocks { get; set; } = [];
 
     [JsonProperty(Order = 6)]
-    public Dictionary<string, CombustibleProperties> Items { get; set; } = new();
+    public Dictionary<string, CombustibleProperties> Items { get; set; } = [];
 
     public ConfigCombustibleProperties(ICoreAPI api, ConfigCombustibleProperties previousConfig = null)
     {
@@ -56,8 +56,7 @@ public class ConfigCombustibleProperties : IModConfigWithAutoFill
                 continue;
             }
 
-            // no need for compact code here
-            string code = obj.Code.ToString();
+            string code = obj.Code.ToShortString();
 
             switch (obj)
             {
@@ -89,10 +88,10 @@ public class ConfigCombustibleProperties : IModConfigWithAutoFill
     {
         switch (obj)
         {
-            case Block when Blocks.Any():
+            case Block when Blocks.Count != 0:
                 foreach ((string key, CombustibleProperties value) in Blocks)
                 {
-                    if (!obj.WildCardMatchExt(key))
+                    if (!WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         continue;
                     }
@@ -106,10 +105,10 @@ public class ConfigCombustibleProperties : IModConfigWithAutoFill
                     break;
                 }
                 break;
-            case Item when Items.Any():
+            case Item when Items.Count != 0:
                 foreach ((string key, CombustibleProperties value) in Items)
                 {
-                    if (!obj.WildCardMatchExt(key))
+                    if (!WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         continue;
                     }

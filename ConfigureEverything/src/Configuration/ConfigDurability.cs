@@ -18,10 +18,10 @@ public class ConfigDurability : IModConfigWithAutoFill
     public string Description => "Configure how many uses this item has when used";
 
     [JsonProperty(Order = 4)]
-    public Dictionary<string, int> Blocks { get; set; } = new();
+    public Dictionary<string, int> Blocks { get; set; } = [];
 
     [JsonProperty(Order = 5)]
-    public Dictionary<string, int> Items { get; set; } = new();
+    public Dictionary<string, int> Items { get; set; } = [];
 
     public ConfigDurability(ICoreAPI api, ConfigDurability previousConfig = null)
     {
@@ -49,8 +49,7 @@ public class ConfigDurability : IModConfigWithAutoFill
                 continue;
             }
 
-            // no need for compact code here
-            string code = obj.Code.ToString();
+            string code = obj.Code.ToShortString();
 
             switch (obj)
             {
@@ -68,20 +67,20 @@ public class ConfigDurability : IModConfigWithAutoFill
     {
         switch (obj)
         {
-            case Block when Blocks.Any():
+            case Block when Blocks.Count != 0:
                 foreach ((string key, int value) in Blocks)
                 {
-                    if (obj.WildCardMatchExt(key))
+                    if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         obj.Durability = value;
                         break;
                     }
                 }
                 break;
-            case Item when Items.Any():
+            case Item when Items.Count != 0:
                 foreach ((string key, int value) in Items)
                 {
-                    if (obj.WildCardMatchExt(key))
+                    if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         obj.Durability = value;
                         break;

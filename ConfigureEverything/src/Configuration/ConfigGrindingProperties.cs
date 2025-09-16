@@ -18,10 +18,10 @@ public class ConfigGrindingProperties : IModConfigWithAutoFill
     public string Description => "Configure whether item can be ground into something else in quern";
 
     [JsonProperty(Order = 4)]
-    public Dictionary<string, GrindingProperties> Blocks { get; set; } = new();
+    public Dictionary<string, GrindingProperties> Blocks { get; set; } = [];
 
     [JsonProperty(Order = 5)]
-    public Dictionary<string, GrindingProperties> Items { get; set; } = new();
+    public Dictionary<string, GrindingProperties> Items { get; set; } = [];
 
     public ConfigGrindingProperties(ICoreAPI api, ConfigGrindingProperties previousConfig = null)
     {
@@ -49,8 +49,7 @@ public class ConfigGrindingProperties : IModConfigWithAutoFill
                 continue;
             }
 
-            // no need for compact code here
-            string code = obj.Code.ToString();
+            string code = obj.Code.ToShortString();
 
             switch (obj)
             {
@@ -82,10 +81,10 @@ public class ConfigGrindingProperties : IModConfigWithAutoFill
     {
         switch (obj)
         {
-            case Block when Blocks.Any():
+            case Block when Blocks.Count != 0:
                 foreach ((string key, GrindingProperties value) in Blocks)
                 {
-                    if (!obj.WildCardMatchExt(key))
+                    if (!WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         continue;
                     }
@@ -99,10 +98,10 @@ public class ConfigGrindingProperties : IModConfigWithAutoFill
                     break;
                 }
                 break;
-            case Item when Items.Any():
+            case Item when Items.Count != 0:
                 foreach ((string key, GrindingProperties value) in Items)
                 {
-                    if (!obj.WildCardMatchExt(key))
+                    if (!WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         continue;
                     }

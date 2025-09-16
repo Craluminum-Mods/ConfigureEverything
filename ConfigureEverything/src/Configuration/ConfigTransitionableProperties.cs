@@ -27,10 +27,10 @@ public class ConfigTransitionableProperties : IModConfigWithAutoFill
     };
 
     [JsonProperty(Order = 5)]
-    public Dictionary<string, TransitionableProperties[]> Blocks { get; set; } = new();
+    public Dictionary<string, TransitionableProperties[]> Blocks { get; set; } = [];
 
     [JsonProperty(Order = 6)]
-    public Dictionary<string, TransitionableProperties[]> Items { get; set; } = new();
+    public Dictionary<string, TransitionableProperties[]> Items { get; set; } = [];
 
     public ConfigTransitionableProperties(ICoreAPI api, ConfigTransitionableProperties previousConfig = null)
     {
@@ -53,13 +53,12 @@ public class ConfigTransitionableProperties : IModConfigWithAutoFill
     {
         foreach (CollectibleObject obj in api.World.Collectibles)
         {
-            if (obj == null || obj.Code == null || obj.TransitionableProps == null || !obj.TransitionableProps.Any())
+            if (obj == null || obj.Code == null || obj.TransitionableProps == null || obj.TransitionableProps.Length == 0)
             {
                 continue;
             }
             
-            // no need for compact code here
-            string code = obj.Code.ToString();
+            string code = obj.Code.ToShortString();
 
             switch (obj)
             {
@@ -85,20 +84,20 @@ public class ConfigTransitionableProperties : IModConfigWithAutoFill
     {
         switch (obj)
         {
-            case Block when Blocks.Any():
+            case Block when Blocks.Count != 0:
                 foreach ((string key, TransitionableProperties[] value) in Blocks)
                 {
-                    if (obj.WildCardMatchExt(key) && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
+                    if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code) && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
                     {
                         obj.TransitionableProps = value;
                         break;
                     }
                 }
                 break;
-            case Item when Items.Any():
+            case Item when Items.Count != 0:
                 foreach ((string key, TransitionableProperties[] value) in Items)
                 {
-                    if (obj.WildCardMatchExt(key) && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
+                    if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code) && value.All(x => x.TransitionedStack.Resolve(api.World, "")))
                     {
                         obj.TransitionableProps = value;
                         break;

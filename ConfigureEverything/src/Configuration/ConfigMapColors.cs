@@ -15,7 +15,7 @@ public class ConfigMapColors : IModConfig
     public string Description => "Adjut map colors on world map and minimap";
 
     [JsonProperty(Order = 3)]
-    public OrderedDictionary<string, string> HexColorsByCode { get; set; } = new();
+    public OrderedDictionary<string, string> HexColorsByCode { get; set; } = [];
 
     public ConfigMapColors(ICoreAPI api, ConfigMapColors previousConfig = null)
     {

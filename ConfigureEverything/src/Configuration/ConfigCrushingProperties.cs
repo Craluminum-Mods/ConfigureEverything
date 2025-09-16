@@ -18,10 +18,10 @@ public class ConfigCrushingProperties : IModConfigWithAutoFill
     public string Description => "Configure whether item can be crushed into something else in pulverizer";
 
     [JsonProperty(Order = 4)]
-    public Dictionary<string, CrushingProperties> Blocks { get; set; } = new();
+    public Dictionary<string, CrushingProperties> Blocks { get; set; } = [];
 
     [JsonProperty(Order = 5)]
-    public Dictionary<string, CrushingProperties> Items { get; set; } = new();
+    public Dictionary<string, CrushingProperties> Items { get; set; } = [];
 
     public ConfigCrushingProperties(ICoreAPI api, ConfigCrushingProperties previousConfig = null)
     {
@@ -49,8 +49,7 @@ public class ConfigCrushingProperties : IModConfigWithAutoFill
                 continue;
             }
 
-            // no need for compact code here
-            string code = obj.Code.ToString();
+            string code = obj.Code.ToShortString();
 
             switch (obj)
             {
@@ -82,10 +81,10 @@ public class ConfigCrushingProperties : IModConfigWithAutoFill
     {
         switch (obj)
         {
-            case Block when Blocks.Any():
+            case Block when Blocks.Count != 0:
                 foreach ((string key, CrushingProperties value) in Blocks)
                 {
-                    if (!obj.WildCardMatchExt(key))
+                    if (!WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         continue;
                     }
@@ -99,10 +98,10 @@ public class ConfigCrushingProperties : IModConfigWithAutoFill
                     break;
                 }
                 break;
-            case Item when Items.Any():
+            case Item when Items.Count != 0:
                 foreach ((string key, CrushingProperties value) in Items)
                 {
-                    if (!obj.WildCardMatchExt(key))
+                    if (!WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         continue;
                     }

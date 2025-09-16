@@ -19,7 +19,7 @@ public class ConfigBlockResistance : IModConfigWithAutoFill
     public string Description => "Configure how long it takes to break a block in seconds";
 
     [JsonProperty(Order = 4)]
-    public Dictionary<string, float> Blocks { get; set; } = new();
+    public Dictionary<string, float> Blocks { get; set; } = [];
 
     public ConfigBlockResistance(ICoreAPI api, ConfigBlockResistance previousConfig = null)
     {
@@ -46,7 +46,7 @@ public class ConfigBlockResistance : IModConfigWithAutoFill
                 continue;
             }
 
-            string code = block.Code.GetCompactCode().ToString();
+            string code = block.Code.ToShortString();
             if (!Blocks.ContainsKey(code))
             {
                 Blocks.Add(code, block.Resistance);
@@ -56,14 +56,14 @@ public class ConfigBlockResistance : IModConfigWithAutoFill
 
     public void ApplyPatches(CollectibleObject obj)
     {
-        if (obj is not Block block || !Blocks.Any())
+        if (obj is not Block block || Blocks.Count == 0)
         {
             return;
         }
 
         foreach ((string key, float value) in Blocks)
         {
-            if (obj.WildCardMatchExt(key))
+            if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
             {
                 block.Resistance = value;
                 break;

@@ -25,10 +25,10 @@ public class ConfigNutritionProperties : IModConfigWithAutoFill
     };
 
     [JsonProperty(Order = 5)]
-    public Dictionary<string, FoodNutritionProperties> Blocks { get; set; } = new();
+    public Dictionary<string, FoodNutritionProperties> Blocks { get; set; } = [];
 
     [JsonProperty(Order = 6)]
-    public Dictionary<string, FoodNutritionProperties> Items { get; set; } = new();
+    public Dictionary<string, FoodNutritionProperties> Items { get; set; } = [];
 
     public ConfigNutritionProperties(ICoreAPI api, ConfigNutritionProperties previousConfig = null)
     {
@@ -56,8 +56,7 @@ public class ConfigNutritionProperties : IModConfigWithAutoFill
                 return;
             }
 
-            // no need for compact code here
-            string code = obj.Code.ToString();
+            string code = obj.Code.ToShortString();
 
             switch (obj)
             {
@@ -75,20 +74,20 @@ public class ConfigNutritionProperties : IModConfigWithAutoFill
     {
         switch (obj)
         {
-            case Block when Blocks.Any():
+            case Block when Blocks.Count != 0:
                 foreach ((string key, FoodNutritionProperties value) in Blocks)
                 {
-                    if (obj.WildCardMatchExt(key))
+                    if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         obj.NutritionProps = value;
                         break;
                     }
                 }
                 break;
-            case Item when Items.Any():
+            case Item when Items.Count != 0:
                 foreach ((string key, FoodNutritionProperties value) in Items)
                 {
-                    if (obj.WildCardMatchExt(key))
+                    if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         obj.NutritionProps = value;
                         break;

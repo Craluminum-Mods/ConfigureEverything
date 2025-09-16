@@ -25,10 +25,10 @@ public class ConfigToolMiningSpeed : IModConfigWithAutoFill
     };
 
     [JsonProperty(Order = 5)]
-    public Dictionary<string, Dictionary<EnumBlockMaterial, float>> Blocks { get; set; } = new();
+    public Dictionary<string, Dictionary<EnumBlockMaterial, float>> Blocks { get; set; } = [];
 
     [JsonProperty(Order = 6)]
-    public Dictionary<string, Dictionary<EnumBlockMaterial, float>> Items { get; set; } = new();
+    public Dictionary<string, Dictionary<EnumBlockMaterial, float>> Items { get; set; } = [];
 
     public ConfigToolMiningSpeed(ICoreAPI api, ConfigToolMiningSpeed previousConfig = null)
     {
@@ -56,8 +56,7 @@ public class ConfigToolMiningSpeed : IModConfigWithAutoFill
                 continue;
             }
 
-            // no need for compact code here
-            string code = obj.Code.ToString();
+            string code = obj.Code.ToShortString();
 
             switch (obj)
             {
@@ -75,20 +74,20 @@ public class ConfigToolMiningSpeed : IModConfigWithAutoFill
     {
         switch (obj)
         {
-            case Block when Blocks.Any():
+            case Block when Blocks.Count != 0:
                 foreach ((string key, Dictionary<EnumBlockMaterial, float> value) in Blocks)
                 {
-                    if (obj.WildCardMatchExt(key))
+                    if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         obj.MiningSpeed = value;
                         break;
                     }
                 }
                 break;
-            case Item when Items.Any():
+            case Item when Items.Count != 0:
                 foreach ((string key, Dictionary<EnumBlockMaterial, float> value) in Items)
                 {
-                    if (obj.WildCardMatchExt(key))
+                    if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
                     {
                         obj.MiningSpeed = value;
                         break;

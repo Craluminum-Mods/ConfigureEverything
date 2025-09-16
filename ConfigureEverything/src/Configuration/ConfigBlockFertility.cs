@@ -19,7 +19,7 @@ public class ConfigBlockFertility : IModConfigWithAutoFill
     public string Description => "Configure what can grow on a block. 0 = nothing can grow, 10 = some tallgrass and small trees can be grow on it, 100 = all grass and trees can grow on it";
 
     [JsonProperty(Order = 4)]
-    public Dictionary<string, int> Blocks { get; set; } = new();
+    public Dictionary<string, int> Blocks { get; set; } = [];
 
     public ConfigBlockFertility(ICoreAPI api, ConfigBlockFertility previousConfig = null)
     {
@@ -46,7 +46,7 @@ public class ConfigBlockFertility : IModConfigWithAutoFill
                 continue;
             }
 
-            string code = block.Code.GetCompactCode().ToString();
+            string code = block.Code.ToShortString();
             if (!Blocks.ContainsKey(code))
             {
                 Blocks.Add(code, block.Fertility);
@@ -56,14 +56,14 @@ public class ConfigBlockFertility : IModConfigWithAutoFill
 
     public void ApplyPatches(CollectibleObject obj)
     {
-        if (obj is not Block block || !Blocks.Any())
+        if (obj is not Block block || Blocks.Count == 0)
         {
             return;
         }
 
         foreach ((string key, int value) in Blocks)
         {
-            if (obj.WildCardMatchExt(key))
+            if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
             {
                 block.Fertility = value;
                 break;

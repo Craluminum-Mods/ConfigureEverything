@@ -25,7 +25,7 @@ public class ConfigCropProperties : IModConfigWithAutoFill
     };
 
     [JsonProperty(Order = 5)]
-    public Dictionary<string, BlockCropProperties> Crops { get; set; } = new();
+    public Dictionary<string, BlockCropProperties> Crops { get; set; } = [];
 
     public ConfigCropProperties(ICoreAPI api, ConfigCropProperties previousConfig = null)
     {
@@ -47,7 +47,7 @@ public class ConfigCropProperties : IModConfigWithAutoFill
     {
         foreach (Block obj in api.World.Blocks.Where(x => x.CropProps != null && x.CropProps?.Behaviors?.Length == 0))
         {
-            string code = obj.Code.ToString().Replace(obj.Code.EndVariant(), "*");
+            string code = obj.Code.ToShortString().Replace(obj.Code.EndVariant(), "*");
 
             if (!Crops.ContainsKey(code))
             {
@@ -58,14 +58,14 @@ public class ConfigCropProperties : IModConfigWithAutoFill
 
     public void ApplyPatches(CollectibleObject obj)
     {
-        if (obj is not Block block || !Crops.Any())
+        if (obj is not Block block || Crops.Count == 0)
         {
             return;
         }
 
         foreach ((string key, BlockCropProperties value) in Crops)
         {
-            if (obj.WildCardMatchExt(key))
+            if (WildcardUtil.Match(AssetLocation.Create(key), obj.Code))
             {
                 CropBehavior[] behaviors = block.CropProps.Behaviors;
                 block.CropProps = value;
