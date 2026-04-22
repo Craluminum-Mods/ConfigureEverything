@@ -6,9 +6,9 @@
     "modid": "configureeverything",
     "name": "Configure Everything",
     "description": "All configurations in one place",
-    "authors": ["Craluminum2413"],
-    "version": "2.2.1",
+    "authors": ["Craluminum2413 (Dana)"],
+    "version": "3.0.0",
     "dependencies": {
-        "game": "1.21.0"
+        "game": "1.22.0"
     }
 }
